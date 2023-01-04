@@ -89,8 +89,7 @@ while true; do
                 /ranking*) ranking; break;;
             esac
             continue
-            fi
-                #grep -qE "^/newchurras " <<< "$comando" && newchurras ${comando//\/newchurras /};
+            #grep -qE "^/newchurras " <<< "$comando" && newchurras ${comando//\/newchurras /};
 
             # criação de churras (arquivo CHURRAS)
             # listagem de presentes
