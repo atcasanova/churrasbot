@@ -36,5 +36,5 @@ Sempre que uma mensagem de Live Location for processada pelo bot, ela será dele
 * `/qualchurras` mostra o próximo churrasco marcado
 
 # TODO
-[ ] Implementar horário mínimo para checkin
+- [ ] Implementar horário mínimo para checkin
 
