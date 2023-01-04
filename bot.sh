@@ -48,8 +48,6 @@ qualchurras(){
 }
 
 ranking(){
-    local qtd=( C_* )
-    local users=( $(cat C_* | cut -f1 -d: | sort -u) )
     envia "$(cut -f1 -d: C_* | sort | uniq -c | sort -nr | sed 's/^ \{1,\}//g')"
 }
 
@@ -79,6 +77,8 @@ while true; do
                 offset
                 envia "Checkin proibido, ou tá longe ou passou da hora. Chora, @$username"
             fi
+        elif [ "$longitude" != "null "]; then
+            curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" && offset
         else
             offset
             comando="${text//_/ }"
