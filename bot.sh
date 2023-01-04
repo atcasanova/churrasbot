@@ -77,6 +77,8 @@ while true; do
                 offset
                 envia "Checkin proibido, ou tá longe ou passou da hora. Chora, @$username"
             fi
+        elif [ "$longitude" != "null" ]; then
+            curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" && offset
         else
             offset
             comando="${text//_/ }"
