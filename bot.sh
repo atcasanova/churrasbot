@@ -4,9 +4,9 @@ source env.sh
 DISTANCIA=150
 curl -s $apiurl/getMe >/dev/null
 envia() {
-    curl -s -X POST "$apiurl/sendMessage" \
+    id_msg=$(curl -s -X POST "$apiurl/sendMessage" \
     -F text="$*" \
-    -F chat_id=$CHATID 
+    -F chat_id=$CHATID | jq -r '.result.message_id')
 }
 
 offset(){
@@ -25,7 +25,7 @@ newchurras(){
     echo "$lugar|$1|${2//h/:}" > CHURRAS
     echo "CHURRAS MARCADO $lugar|$1|${2//h/:}"
     envia "Churras marcado no dia $1. Checkin permitido até $2 na $lugar"
-    curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$messageId" && offset
+    curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$id_msg"
 
     touch C_${lugar// /_}_${1//\//}
 }
