@@ -1,9 +1,10 @@
 #!/bin/bash
+export LC_DATE=pt_BR.UTF-8
 cd $(dirname $0)
 source env.sh
 DISTANCIA=150
 curl -s $apiurl/getMe >/dev/null
-envia() {
+envia(){
     id_msg=$(curl -s -X POST "$apiurl/sendMessage" \
     -F text="$*" \
     -F chat_id=$CHATID | jq -r '.result.message_id')
@@ -16,6 +17,7 @@ offset(){
 }
 
 newchurras(){
+    [ "$username" == "atc1235" ] || return 6;
     (( $# != 3 )) && return 2
     echo $*
     grep -qEo "^[0-9]{2}/[0-9]{2}/[0-9]{4}$" <<< "$1" || { echo "data invalida" ; return 3; }
@@ -31,6 +33,7 @@ newchurras(){
 }
 
 newplace(){
+    [ "$username" == "atc1235" ] || return 6;
     (( $# != 3 )) && return 2
     grep -qEo -- "-?[0-9]+\.[0-9]+" <<< $2 || { echo "latitude invalida"; return 3; }
     grep -qEo -- "-?[0-9]+\.[0-9]+" <<< $3 || { echo "longitude invalida"; return 3; }
@@ -78,15 +81,14 @@ while true; do
             fi
         else
             offset
-            if [ "$username" == "atc1235" ]; then
-                comando="${text//_/ }"
-                case "$comando" in
-                    /newchurras*) newchurras ${comando//\/newchurras /}; break;;
-                    /newplace*) newplace ${comando//\/newplace /}; break;;
-                    /qualchurras*) qualchurras; break;;
-                    /ranking*) ranking; break;;
-                esac
-                continue
+            comando="${text//_/ }"
+            case "$comando" in
+                /newchurras*) newchurras ${comando//\/newchurras /}; break;;
+                /newplace*) newplace ${comando//\/newplace /}; break;;
+                /qualchurras*) qualchurras; break;;
+                /ranking*) ranking; break;;
+            esac
+            continue
             fi
                 #grep -qE "^/newchurras " <<< "$comando" && newchurras ${comando//\/newchurras /};
 
