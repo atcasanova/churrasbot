@@ -49,7 +49,7 @@ qualchurras(){
 
 ranking(){
     local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -nr | sed 's/^ \{1,\}//g')"
-    [ -x $ranking ] && envia "Ranking ainda está vazio" || envia "$ranking"
+    [ -z $ranking ] && envia "Ranking ainda está vazio" || envia "$ranking"
 }
 
 offset=$(cat offset)
