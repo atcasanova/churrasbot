@@ -1,6 +1,6 @@
 #!/bin/bash
-export LC_DATE=pt_BR.UTF-8
 cd $(dirname $0)
+[ -x distance ] || gcc distance.c -lm -o distance 2>/dev/null
 source env.sh
 DISTANCIA=150
 curl -s $apiurl/getMe >/dev/null
@@ -62,13 +62,13 @@ while true; do
         (( ${chatid//null/$CHATID} != CHATID )) && continue
         if [ "$live_period" != "null" ]; then
             offset
-            envia "Usuário @$username enviou a localizacao $latitude,$longitude em $(date -d @$data)"
+            # envia "Usuário @$username enviou a localizacao $latitude,$longitude em $(date -d @$data)"
             IFS='|' read lugar data hora < CHURRAS
             alvo=$(grep -m1 "^$lugar|" localizacoes)
             IFS='|' read nome lat long <<< $alvo
             echo ./distance $lat $long $latitude $longitude
             distance=$(./distance $lat $long $latitude $longitude | cut -f1 -d.)
-            envia "Usuário @$username está a $distance metros da $lugar. Checkin permitido até $data, $hora"
+            envia "O @$username está a $distance metros da $lugar. Checkin permitido até $data, $hora"
             curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" && offset
             if (( $distance <= $DISTANCIA && $(date +%s) <= $(date -d "$data $hora:59" +%s) )); then
                 grep -q "^$username" C_${lugar// /_}_${data//\//} && { envia "checkin ja realizado"; } || {
@@ -77,7 +77,7 @@ while true; do
                 }
             else
                 offset
-                envia "Checkin proibido"
+                envia "Checkin proibido, ou tá longe ou passou da hora. Chora, @$username"
             fi
         else
             offset
