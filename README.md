@@ -4,6 +4,7 @@ Esse é o CHURRASBOT, criado para validar a presença dos competidores nos churr
 
 ## Funcionamento
 O arquivo `distance.c` deve ser compilado novamente para evitar problemas de glib
+
 ```gcc distance.c -lm -o distance```
 
 O admin (eu) deve cadastrar previamente o local onde o churrasco será realizado, com o seguinte comando:
