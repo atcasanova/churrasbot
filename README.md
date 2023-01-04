@@ -14,6 +14,7 @@ apiurl="https://api.telegram.org/bot$TOKEN"
 CHATID="CHAT_ID do seu grupo"
 ```
 
+## Funcionamento
 O admin (eu) deve cadastrar previamente o local onde o churrasco será realizado, com o seguinte comando:
 
 ```/newplace VENUE lat long```
