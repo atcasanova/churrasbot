@@ -6,7 +6,7 @@ curl -s $apiurl/getMe >/dev/null
 envia() {
     curl -s -X POST "$apiurl/sendMessage" \
     -F text="$*" \
-    -F chat_id=$CHATID 2>&1 >/dev/null
+    -F chat_id=$CHATID 
 }
 
 offset(){
@@ -25,6 +25,8 @@ newchurras(){
     echo "$lugar|$1|${2//h/:}" > CHURRAS
     echo "CHURRAS MARCADO $lugar|$1|${2//h/:}"
     envia "Churras marcado no dia $1. Checkin permitido até $2 na $lugar"
+    curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$messageId" && offset
+
     touch C_${lugar// /_}_${1//\//}
 }
 
