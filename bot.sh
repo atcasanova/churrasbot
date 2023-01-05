@@ -155,6 +155,7 @@ while true; do
         # se for uma mensagem de localização normal (live_location vazio, mas longitude preenchida)
         # apaga a mensagem e compensa o offset
         elif [ "$longitude" != "null" ]; then
+            echo "Mensagem de localização detectada vindo de @$username. Tentando apagar $messageId em $offset"
             curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" && offset
         else
             offset
