@@ -31,7 +31,7 @@ newchurras(){
         echo "data invalida";
         return 3;
     }
-    [[ "$hora" =~ ^[0-9]{2}(:|h)[0-9]{2}$ ]] || {
+    [[ "$hora" =~ ^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$ ]] || {
         echo "hora invalida";
         return 3;
     }
@@ -130,7 +130,14 @@ while true; do
             # calcula se a distância e horário são satisfatórios.
             # se por algum motivo o cálculo da distância falhar, a distância máxima aceitavel
             # é considerada.
-            if (( ${distance:-$DISTANCIA} <= $DISTANCIA && $(date +%s) <= $(date -d "$data $hora:59" +%s) )); then
+            horario_maximo=$(date -d "$data $hora:59" +%s)
+            horario_minimo=$(date -d "$data 11:00:00" +%s)
+            agora=$(date +%s)
+            echo "agora: $(date -d@$agora)"
+            echo "minimo: $(date -d@$horario_minimo)"
+            echo "maximo: $(date -d@$horario_maximo)"
+
+            if (( ${distance:-$DISTANCIA} <= $DISTANCIA && $agora <= $horario_maximo && $agora >= $horario_minimo  )); then
                 
                 # verifica se o usuário já fez checkin nesse churras antes
                 # caso não tenha feito, checkin aceito
