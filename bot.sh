@@ -130,14 +130,15 @@ while true; do
             # calcula se a distância e horário são satisfatórios.
             # se por algum motivo o cálculo da distância falhar, a distância máxima aceitavel
             # é considerada.
-            horario_maximo=$(date -d "$data $hora:59" +%s)
-            horario_minimo=$(date -d "$data 11:00:00" +%s)
+            data_convertida=${data:3:2}/${data:0:2}/${data:6:4}
+            horario_maximo=$(date -d "$data_convertida $hora:59" +%s)
+            horario_minimo=$(date -d "$data_convertida 11:00:00" +%s)
             agora=$(date +%s)
             echo "agora: $(date -d@$agora)"
             echo "minimo: $(date -d@$horario_minimo)"
             echo "maximo: $(date -d@$horario_maximo)"
 
-            if (( ${distance:-$DISTANCIA} <= $DISTANCIA && $agora <= $horario_maximo && $agora >= $horario_minimo  )); then
+            if (( ${distance:-$DISTANCIA} <= $DISTANCIA && $agora <= $horario_maximo && $agora >= $horario_minimo )); then
                 
                 # verifica se o usuário já fez checkin nesse churras antes
                 # caso não tenha feito, checkin aceito
