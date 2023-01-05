@@ -9,6 +9,15 @@ envia(){
     -F chat_id=$CHATID | jq -r '.result.message_id')
 }
 
+reply(){
+    local reply_to="$1"
+    shift
+    curl -s -X POST "$apiurl/sendMessage" \
+    -F text="$*" \
+    -F chat_id="$CHATID" \
+    -F reply_to_message_id="$reply_to"
+}
+
 offset(){
     echo $offset
     offset=$((offset+1))
@@ -44,12 +53,14 @@ newchurras(){
         envia "Não sei onde é ${place^^}. Cadastre com /newplace";
         return 4;
     }
+    read pin pin pin pin < CHURRAS
 
     # Caso nenhum erro seja encontrado, cadastra o churras
-    echo "$lugar|$data|${hora//h/:}" > CHURRAS
     envia "Churras marcado no dia $data. Checkin permitido até ${hora//h/:} na $lugar"
-
-    # pina a mensagem enviada marcando churrasco
+    echo "$lugar|$data|${hora//h/:}|$id_msg" > CHURRAS
+    
+    # despina o churras antigo e pina a mensagem enviada marcando churrasco
+    curl -s "$apiurl/unpinChatMessage?chat_id=$CHATID&message_id=$pin"
     curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$id_msg"
 
     # cria o arquivo de presença pro churrasco
@@ -88,8 +99,8 @@ newplace(){
 }
 
 qualchurras(){
-    IFS='|' read loc dat hr < CHURRAS
-    envia "O último churrasco cadastrado é dia $dat, checkin válido até $hr, na $loc"
+    IFS='|' read loc dat hr pin < CHURRAS
+    reply "$pin" "O último churrasco cadastrado é dia $dat, checkin válido até $hr, na $loc"
 }
 
 ranking(){
