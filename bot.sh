@@ -127,7 +127,7 @@ while true; do
             offset
 
             # pegar data, hora e localização do churras atual
-            IFS='|' read lugar data hora < CHURRAS
+            IFS='|' read lugar data hora lixo < CHURRAS
             alvo=$(grep -m1 "^$lugar|" localizacoes)
             IFS='|' read nome lat long <<< "$alvo"
 
