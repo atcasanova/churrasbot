@@ -125,7 +125,7 @@ while true; do
             envia "O @$username está a $distance metros da $lugar. Checkin permitido de 11:00 até $data, $hora"
             
             # deleta a mensagem de localização enviada para não poluir o grupo e compensa o offset
-            curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" # && offset
+            curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" && offset
 
             # calcula se a distância e horário são satisfatórios.
             # se por algum motivo o cálculo da distância falhar, a distância máxima aceitavel
@@ -156,7 +156,7 @@ while true; do
         # apaga a mensagem e compensa o offset
         elif [ "$longitude" != "null" ]; then
             echo "Mensagem de localização detectada vindo de @$username. Tentando apagar $messageId em $offset"
-            curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" # && offset
+            curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" && offset
         else
             offset
             comando="${text//_/ }"
