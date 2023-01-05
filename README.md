@@ -40,5 +40,5 @@ Sempre que uma mensagem com localização for processada pelo bot, ela será del
 * `/qualchurras` mostra o próximo churrasco marcado
 
 # TODO
-- [x] Implementar horário mínimo para checkin
+- [x] Implementar horário mínimo para checkin 
 
