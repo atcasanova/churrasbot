@@ -122,7 +122,7 @@ while true; do
 
             # calcula distância do usuário até o ponto cadastrado
             distance=$(./distance $lat $long $latitude $longitude | cut -f1 -d.)
-            envia "O @$username está a $distance metros da $lugar. Checkin permitido até $data, $hora"
+            envia "O @$username está a $distance metros da $lugar. Checkin permitido de 11:00 até $data, $hora"
             
             # deleta a mensagem de localização enviada para não poluir o grupo e compensa o offset
             curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" && offset
