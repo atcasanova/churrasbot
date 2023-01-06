@@ -119,11 +119,8 @@ ranking(){
 }
 
 fake(){
-    echo entrei aqui
     (( $# != 1 )) && return 2;
-    echo passei daqui
     [ "$username" != "$ADMIN" ] && return 3;
-    echo passei tb
     
     IFS='|' read loc dat hr pin < CHURRAS
     filename=C_${loc// /_}_${dat//\//}
