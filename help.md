@@ -6,6 +6,8 @@ Sempre que uma mensagem com localização for processada pelo bot, ela será del
 
 O admin (eu) pode cancelar checkins de malandros usando fake GPS:
 
-```/fake nome_do_usuario```
+```
+/fake nome_do_usuario
+```
 
 Esse comando retira o checkin de quem tentou roubar e retira um ponto do malandro no ranking.
