@@ -64,7 +64,7 @@ newchurras(){
     curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$id_msg"
 
     # cria o arquivo de presença pro churrasco
-    touch C_${lugar// /_}_${1//\//}
+    touch C_${lugar// /_}_${data//\//}
 }
 
 newplace(){
@@ -105,7 +105,33 @@ qualchurras(){
 
 ranking(){
     local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -nr | sed 's/^ \{1,\}//g')"
-    [ -z $ranking ] && envia "Ranking ainda está vazio" || envia "$ranking"
+    for penalizado in $(sort -u penalidades); do
+        edit=$(grep -E "[0-9] +$penalizado$" <<< "$ranking")
+        [ -z "$edit" ] || {
+            read pontos malandro <<< "$edit"
+            debito=$(grep -c "^$malandro$" penalidades)
+            pontos=$(( $pontos - $debito ))
+            ranking=$(echo "$ranking" | sed "s/$edit/$pontos $penalizado (-$debito)/g" | sort -nr)
+        }
+    done
+    [ -z "$ranking" ] && envia "Ranking ainda está vazio" || envia "$ranking"
+}
+
+fake(){
+    (( $# != 1 )) && return 2;
+    [ "$username" != "$ADMIN" ] && return 3;
+    
+    IFS='|' read loc dat hr pin < CHURRAS
+    filename=C_${loc// /_}_${dat//\//}
+    local malandro="$1"
+    grep -qi "^$malandro:" $filename && {
+        sed -i "/^$malandro:$loc:/d" $filename && {
+            envia "Checkin do $malandro removido"
+            echo "$malandro" >> penalidades
+            envia "Presenças:
+$(cut -f1 -d: $filename)"
+        }
+    }
 }
 
 offset=$(cat offset)
@@ -174,6 +200,7 @@ while true; do
             case "$comando" in
                 /newchurras*)   newchurras ${comando//\/newchurras /}; break;;
                 /newplace*)     newplace ${comando//\/newplace /}; break;;
+                /fake*)         fake ${comando//\/fake /}; break;;
                 /qualchurras*)  qualchurras; break;;
                 /ranking*)      ranking; break;;
             esac
