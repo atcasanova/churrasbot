@@ -4,6 +4,12 @@ touch penalidades
 [ -x distance ] || gcc distance.c -lm -o distance 2>/dev/null
 source env.sh
 curl -s $apiurl/getMe >/dev/null
+help(){
+    curl -s -X POST "$apiurl/sendMessage" \
+    -F "chat_id=$CHATID" \
+    -F "parse_mode=markdown" \
+    -F text="$(cat help.md)"
+}
 envia(){
     id_msg=$(curl -s -X POST "$apiurl/sendMessage" \
     -F text="$*" \
