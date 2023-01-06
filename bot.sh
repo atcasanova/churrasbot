@@ -4,7 +4,7 @@ touch penalidades
 [ -x distance ] || gcc distance.c -lm -o distance 2>/dev/null
 source env.sh
 curl -s $apiurl/getMe >/dev/null
-help(){
+ajuda(){
     curl -s -X POST "$apiurl/sendMessage" \
     -F "chat_id=$CHATID" \
     -F "parse_mode=markdown" \
@@ -210,6 +210,7 @@ while true; do
                 /fake*)         fake ${comando//\/fake /}; break;;
                 /qualchurras*)  qualchurras; break;;
                 /ranking*)      ranking; break;;
+                /help*)         ajuda; break;;
             esac
             continue
         fi
