@@ -1,5 +1,6 @@
 #!/bin/bash
 cd $(dirname $0)
+touch penalidades
 [ -x distance ] || gcc distance.c -lm -o distance 2>/dev/null
 source env.sh
 curl -s $apiurl/getMe >/dev/null
