@@ -35,20 +35,24 @@ newchurras(){
     # apenas o admin pode cadastrar um novo churras
     [ "$username" == "$ADMIN" ] || return 6;
     (( $# != 3 )) && return 2
-    local data="$1"
-    local hora="$2"
-    local place="$3"
+    # pegar variáveis na posição correta
+    # independente da ordem, por regex
+    local data=$(grep -Eo "\b(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/(19|20)[0-9]{2}\b" <<< "$*")
+    local hora=$(grep -Eo "\b(0[0-9]|1[0-9]|2[0-3])(:|h)[0-5][0-9]\b" <<< "$*")
+    local place=$(grep -Eo "\b[A-Z]+\b" <<< "${*^^}")
     
-    # verifica por regex o formato de data e hora informados
-    # caso não dê match, retorna erro
-    # TODO: melhorar a regex para não aceitar absurdos como
-    # 99:99 e 82/12/9812
-    [[ "$data" =~ ^[0-9]{2}/[0-9]{2}/[0-9]{4}$ ]] || { 
+    # se as variáveis não forem preenchidas
+    # dropa erro
+    [ -z "$data" ] && { 
         echo "data invalida";
         return 3;
     }
-    [[ "$hora" =~ ^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$ ]] || {
+    [ -z "$hora" ] && {
         echo "hora invalida";
+        return 3;
+    }
+    [ -z "$place" ] && {
+        echo "local invalido";
         return 3;
     }
     
