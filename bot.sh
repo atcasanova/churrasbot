@@ -18,6 +18,7 @@ isAdmin(){
     done
     return 1
 }
+
 envia(){
     id_msg=$(curl -s -X POST "$apiurl/sendMessage" \
     -F text="$*" \
