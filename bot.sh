@@ -14,9 +14,9 @@ ajuda(){
 
 isAdmin(){
     for admin in ${ADMINS[@]}; do
-        [ "$username" == "$admin" ] && return true;
+        [ "$username" == "$admin" ] && return 0;
     done
-    return false
+    return 1
 }
 envia(){
     id_msg=$(curl -s -X POST "$apiurl/sendMessage" \
