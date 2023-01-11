@@ -4,11 +4,19 @@ touch penalidades
 [ -x distance ] || gcc distance.c -lm -o distance 2>/dev/null
 source env.sh
 curl -s $apiurl/getMe >/dev/null
+
 ajuda(){
     curl -s -X POST "$apiurl/sendMessage" \
     -F "chat_id=$CHATID" \
     -F "parse_mode=markdown" \
     -F text="$(cat help.md)" >/dev/null
+}
+
+isAdmin(){
+    for admin in ${ADMINS[@]}; do
+        [ "$username" == "$admin" ] && return true;
+    done
+    return false
 }
 envia(){
     id_msg=$(curl -s -X POST "$apiurl/sendMessage" \
@@ -26,14 +34,11 @@ reply(){
 }
 
 offset(){
-    echo $offset
     offset=$((offset+1))
     echo ${offset:-$offset} > offset
 }
 
 newchurras(){
-    # apenas o admin pode cadastrar um novo churras
-    [ "$username" == "$ADMIN" ] || return 6;
     (( $# != 3 )) && return 2
     # pegar variáveis na posição correta
     # independente da ordem, por regex
@@ -79,7 +84,6 @@ newchurras(){
 }
 
 newplace(){
-    [ "$username" == "$ADMIN" ] || return 6;
     (( $# != 3 )) && return 2
     local venue="$1"
     local latitude="$2"
@@ -130,7 +134,6 @@ ranking(){
 
 fake(){
     (( $# != 1 )) && return 2;
-    [ "$username" != "$ADMIN" ] && return 3;
     
     IFS='|' read loc dat hr pin < CHURRAS
     filename=C_${loc// /_}_${dat//\//}
@@ -209,9 +212,9 @@ while true; do
             offset
             comando="${text//_/ }"
             case "$comando" in
-                /newchurras*)   newchurras ${comando//\/newchurras /}; break;;
-                /newplace*)     newplace ${comando//\/newplace /}; break;;
-                /fake*)         fake ${comando//\/fake /}; break;;
+                /newchurras*)   isAdmin && newchurras ${comando//\/newchurras /}; break;;
+                /newplace*)     isAdmin && newplace ${comando//\/newplace /}; break;;
+                /fake*)         isAdmin && fake ${comando//\/fake /}; break;;
                 /qualchurras*)  qualchurras; break;;
                 /ranking*)      ranking; break;;
                 /help*)         ajuda; break;;

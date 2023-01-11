@@ -12,7 +12,7 @@ Esse é o CHURRASBOT, criado para validar a presença dos competidores nos churr
 TOKEN="token_do_seu_bot"
 apiurl="https://api.telegram.org/bot$TOKEN"
 CHATID="CHAT_ID do seu grupo"
-ADMIN="username_do_admin"
+ADMINS=( "username_do_admin1" "username_do_admin_n" )
 DISTANCIA=150 # distância em metros do ponto cadastrado para o checkin ser aceito
 ```
 
