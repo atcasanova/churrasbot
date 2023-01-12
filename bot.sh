@@ -43,9 +43,10 @@ geraIcs(){
     local nome="Churras @ $1"
     local inicio="$2T100000"
     local fim="$2T${3//:}00"
+    local endereco=$(grep "^$1|" enderecos | cut -f2 -d\|)
 
     filename="$1_$fim.ics"
-    echo -e "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDESCRIPTION:$nome\nSUMMARY:$nome\nSTATUS:CONFIRMED\nDTSTART;VALUE=DATE-TIME:$inicio\nDTEND;VALUE=DATE-TIME:$fim\nGEO:$4\nEND:VEVENT\nEND:VCALENDAR" > $filename
+    echo -e "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDESCRIPTION:$nome\nSUMMARY:$nome\nSTATUS:CONFIRMED\nDTSTART;VALUE=DATE-TIME:$inicio\nDTEND;VALUE=DATE-TIME:$fim\nLOCATION:$endereco\nGEO:$4\nEND:VEVENT\nEND:VCALENDAR" > $filename
     curl -s -X POST "$apiurl/sendDocument"  \
     -F "chat_id=$CHATID" \
     -F "document=@$filename" \
@@ -101,10 +102,12 @@ newchurras(){
 }
 
 newplace(){
-    (( $# != 3 )) && return 2
+    (( $# < 4 )) && return 2
     local venue="$1"
     local latitude="$2"
     local longitude="$3"
+    shift 3
+    local endereco="$*"
 
     # verifica porcamente por expressão regular o formato de latitude e longitude
     # caso não dê match retorna erro
@@ -127,6 +130,7 @@ newplace(){
     # caso nenhum erro seja retornado, cadastra a localização
     # e envia confirmação no grupo
     echo "${venue^^}|$latitude|$longitude" >> localizacoes
+    echo "${venue^^}|$endereco" >> enderecos
     envia "${venue^^} adicionado. lat: $latitude long: $longitude"
 }
 
