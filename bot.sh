@@ -42,7 +42,7 @@ offset(){
 geraIcs(){
     local nome="Churras @ $1"
     local inicio="$2T100000"
-    local fim="$2%${3//:}"
+    local fim="$2T${3//:}"
     filename="$1_$fim.ics"
     echo -e "BEGIN:VCALENDAR\nBEGIN:VEVENT\nSUMMARY:$nome\nDTSTART;VALUE=DATE-TIME:$inicio\nDTEND;VALUE=DATE-TIME:$fim\nLOCATION:$1\nEND:VEVENT\nEND:VCALENDAR" > $filename
     curl -s -X POST "$apiurl/sendDocument"  \
