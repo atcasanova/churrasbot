@@ -42,9 +42,10 @@ offset(){
 geraIcs(){
     local nome="Churras @ $1"
     local inicio="$2T100000"
-    local fim="$2T${3//:}"
+    local fim="$2T${3//:}00"
+
     filename="$1_$fim.ics"
-    echo -e "BEGIN:VCALENDAR\nBEGIN:VEVENT\nSUMMARY:$nome\nDTSTART;VALUE=DATE-TIME:$inicio\nDTEND;VALUE=DATE-TIME:$fim\nLOCATION:$1\nEND:VEVENT\nEND:VCALENDAR" > $filename
+    echo -e "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDESCRIPTION:$nome\nSUMMARY:$nome\nSTATUS:CONFIRMED\nDTSTART;VALUE=DATE-TIME:$inicio\nDTEND;VALUE=DATE-TIME:$fim\nGEO:$4\nEND:VEVENT\nEND:VCALENDAR" > $filename
     curl -s -X POST "$apiurl/sendDocument"  \
     -F "chat_id=$CHATID" \
     -F "document=@$filename" \
@@ -93,7 +94,7 @@ newchurras(){
     curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$id_msg"
 
     # envia o arquivo.ics
-    geraIcs "$lugar" "${data:6:4}${data:3:2}${data:0:2}" "${hora//h/:}:00"
+    geraIcs "$lugar" "${data:6:4}${data:3:2}${data:0:2}" "${hora//h/:}" "$latitude;$longitude"
 
     # cria o arquivo de presença pro churrasco
     touch C_${lugar// /_}_${data//\//}
