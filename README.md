@@ -19,7 +19,7 @@ DISTANCIA=150 # distância em metros do ponto cadastrado para o checkin ser acei
 ## Funcionamento
 O admin (eu) deve cadastrar previamente o local onde o churrasco será realizado, com o seguinte comando:
 
-```/newplace VENUE lat long```
+```/newplace VENUE lat long endereço do local no google maps```
 
 onde `VENUE` é o nome do local a ser utilizado no bot futuramente (sem espaços, por favor) e `lat` e `long` são a latitude e longitude base do lugar.
 
@@ -27,7 +27,7 @@ O admin (eu) pode criar novos churrascos com o seguinte comando:
 
 ```/newchurras dd/mm/aaaa HH:MM VENUE```
 
-Esse comando estabelece o dia e a hora limite para o checkin no churrasco. Também vai colocar a mensagem confirmando o agendamento como "pinada" no grupo.
+Esse comando estabelece o dia e a hora limite para o checkin no churrasco. Também vai colocar a mensagem confirmando o agendamento como "pinada" no grupo, além de enviar um arquivo .ics para que seja possível salvar nas agendas.
 
 ## Check-in
 
