@@ -46,7 +46,7 @@ geraIcs(){
     local endereco=$(grep "^$1|" enderecos | cut -f2 -d\|)
 
     filename="$1_$fim.ics"
-    echo -e "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDESCRIPTION:$nome\nSUMMARY:$nome\nSTATUS:CONFIRMED\nDTSTART;VALUE=DATE-TIME:$inicio\nDTEND;VALUE=DATE-TIME:$fim\nLOCATION:$endereco\nGEO:$4\nEND:VEVENT\nEND:VCALENDAR" > $filename
+    echo -e "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDESCRIPTION:$nome\nUID:${filename//\.ics/}\nSUMMARY:$nome\nSTATUS:CONFIRMED\nDTSTART;VALUE=DATE-TIME:$inicio\nDTEND;VALUE=DATE-TIME:$fim\nLOCATION:$endereco\nGEO:$4\nEND:VEVENT\nEND:VCALENDAR" > $filename
     curl -s -X POST "$apiurl/sendDocument"  \
     -F "chat_id=$CHATID" \
     -F "document=@$filename" \
