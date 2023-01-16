@@ -53,6 +53,20 @@ geraIcs(){
     -F "caption=Agendamento do Churras, salve na agenda"
 }
 
+sendLocation(){
+    (( $# != 1 )) && return 3
+    local venue address lat long
+    IFS='|' read venue address <<< "$(grep "^$1|" enderecos)"
+    [ -z "$venue" ] || {
+        IFS='|' read venue lat long <<< "$(grep "^$1|" localizacoes)"
+        curl -s $apiurl/sendVenue -F "chat_id=$CHATID" \
+        -F "latitude=$lat" \
+        -F "longitude=$long" \
+        -F "title=${venue}" \
+        -F "address=$address"
+    }
+}
+
 newchurras(){
     (( $# != 3 )) && return 2
     # pegar variáveis na posição correta
@@ -96,6 +110,7 @@ newchurras(){
 
     # envia o arquivo.ics
     geraIcs "$lugar" "${data:6:4}${data:3:2}${data:0:2}" "${hora//h/:}" "$latitude;$longitude"
+    sendLocation "$lugar"
 
     # cria o arquivo de presença pro churrasco
     touch C_${lugar// /_}_${data//\//}
