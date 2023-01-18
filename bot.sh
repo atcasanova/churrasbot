@@ -95,7 +95,7 @@ newchurras(){
     # caso o lugar não seja encontrado no arquivo de localizações
     # envia mensagem avisando.
     [[ -z "$lugar" ]] && {
-        envia "Não sei onde é ${place^^}. Cadastre com /newplace";
+        envia "Não sei onde é ${place^^}. Cadastre com /newplace nome lat long endereço";
         return 4;
     }
     read pin pin pin pin < CHURRAS
