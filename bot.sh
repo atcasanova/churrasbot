@@ -170,7 +170,7 @@ ranking(){
 
 fake(){
     (( $# != 1 )) && return 2;
-    
+    local loc dat hr pin
     IFS='|' read loc dat hr pin < CHURRAS
     filename=C_${loc// /_}_${dat//\//}
     local malandro="$1"
