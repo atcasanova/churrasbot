@@ -16,6 +16,7 @@ isAdmin(){
     for admin in ${ADMINS[@]}; do
         [ "$username" == "$admin" ] && return 0;
     done
+    reply $messageId "kkkk coitadinho do @$username"
     return 1
 }
 
@@ -181,7 +182,7 @@ fake(){
             envia "Presenças:
 $(cut -f1 -d: $filename)"
         }
-    }
+    } || envia "$malandro não fez checkin nesse churras"
 }
 
 offset=$(cat offset)
