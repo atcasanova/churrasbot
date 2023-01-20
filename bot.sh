@@ -250,12 +250,12 @@ while true; do
             comando="${text//_/ }"
             echo ":$comando:"
             case "$comando" in
-                /newchurras *)   isAdmin && newchurras ${comando//\/newchurras /}; break;;
-                /newplace *)     isAdmin && newplace ${comando//\/newplace /}; break;;
-                /fake *)         isAdmin && fake ${comando//\/fake /}; break;;
-                /qualchurras *)  qualchurras; break;;
-                /ranking )      ranking; break;;
-                /help )         ajuda; break;;
+                /newchurras*)   isAdmin && newchurras ${comando//\/newchurras /}; break;;
+                /newplace*)     isAdmin && newplace ${comando//\/newplace /}; break;;
+                /fake*)         isAdmin && fake ${comando//\/fake /}; break;;
+                /qualchurras*)  qualchurras; break;;
+                /ranking)      ranking; break;;
+                /help)         ajuda; break;;
             esac
             continue
         fi
