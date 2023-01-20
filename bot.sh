@@ -248,13 +248,14 @@ while true; do
         else
             offset
             comando="${text//_/ }"
+            echo ":$comando:"
             case "$comando" in
-                /newchurras_*)   isAdmin && newchurras ${comando//\/newchurras /}; break;;
-                /newplace_*)     isAdmin && newplace ${comando//\/newplace /}; break;;
-                /fake_*)         isAdmin && fake ${comando//\/fake /}; break;;
-                /qualchurras_*)  qualchurras; break;;
-                /ranking_)      ranking; break;;
-                /help_)         ajuda; break;;
+                /newchurras *)   isAdmin && newchurras ${comando//\/newchurras /}; break;;
+                /newplace *)     isAdmin && newplace ${comando//\/newplace /}; break;;
+                /fake *)         isAdmin && fake ${comando//\/fake /}; break;;
+                /qualchurras *)  qualchurras; break;;
+                /ranking )      ranking; break;;
+                /help )         ajuda; break;;
             esac
             continue
         fi
