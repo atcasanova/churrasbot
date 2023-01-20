@@ -254,8 +254,8 @@ while true; do
                 /newplace*)     isAdmin && newplace ${comando//\/newplace /}; break;;
                 /fake*)         isAdmin && fake ${comando//\/fake /}; break;;
                 /qualchurras*)  qualchurras; break;;
-                /ranking)      ranking; break;;
-                /help)         ajuda; break;;
+                /ranking )      ranking; break;;
+                /help )         ajuda; break;;
             esac
             continue
         fi
