@@ -1,7 +1,6 @@
 #!/bin/bash
 cd $(dirname $0)
 touch penalidades
-[ -x distance ] || gcc distance.c -lm -o distance 2>/dev/null
 source env.sh
 curl -s $apiurl/getMe >/dev/null
 
@@ -52,6 +51,23 @@ geraIcs(){
     -F "chat_id=$CHATID" \
     -F "document=@$filename" \
     -F "caption=Agendamento do Churras, salve na agenda"
+}
+
+distance(){
+    local lat1 lon1 lat2 lon2 a d r pi=3.14159265358979323846
+    lat1=$(echo "scale=10; $1 * (3.14159265358979323846 / 180)" | bc -l)
+    lon1=$(echo "scale=10; $2 * (3.14159265358979323846 / 180)" | bc -l)
+    lat2=$(echo "scale=10; $3 * (3.14159265358979323846 / 180)" | bc -l)
+    lon2=$(echo "scale=10; $4 * (3.14159265358979323846 / 180)" | bc -l)
+
+    # Fórmula de Haversine
+    a=$(echo "scale=10; s((($lat2 - $lat1) / 2))^2 + c($lat1) * c($lat2) * s(($lon2 - $lon1) / 2)^2" | bc -l)
+    d=$(echo "scale=10; 2 * a(sqrt($a))" | bc -l)
+    r=6378140 # Raio da Terra em km
+
+    # Distância em km
+    distance=$(echo "$r * $d " | bc)
+    distance=${distance%\.*}
 }
 
 sendLocation(){
@@ -209,7 +225,7 @@ while true; do
             IFS='|' read nome lat long <<< "$alvo"
 
             # calcula distância do usuário até o ponto cadastrado
-            distance=$(./distance $lat $long $latitude $longitude | cut -f1 -d.)
+            distance $lat $long $latitude $longitude
             envia "O @$username está a $distance metros da $lugar. Checkin permitido de 11:00 até $data, $hora"
             
             # deleta a mensagem de localização enviada para não poluir o grupo e compensa o offset
