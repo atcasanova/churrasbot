@@ -247,13 +247,13 @@ while true; do
             curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" && offset
         else
             offset
-            comando="$(echo ${text//_/ }| sed -e 's/ \+$//g')"
+            comando="$(echo ${text//_/ }| sed -e 's/ \+$//g' | sed "s/$BOTNAME//g")"
             echo ":$comando:"
             case "$comando" in
                 /newchurras\ *)   isAdmin && newchurras ${comando//\/newchurras /}; break;;
                 /newplace\ *)     isAdmin && newplace ${comando//\/newplace /}; break;;
                 /fake\ *)         isAdmin && fake ${comando//\/fake /}; break;;
-                /qualchurras\ *)  qualchurras; break;;
+                /qualchurras)  qualchurras; break;;
                 /ranking)         ranking; break;;
                 /help)            ajuda; break;;
             esac

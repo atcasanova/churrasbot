@@ -13,6 +13,7 @@ TOKEN="token_do_seu_bot"
 apiurl="https://api.telegram.org/bot$TOKEN"
 CHATID="CHAT_ID do seu grupo"
 ADMINS=( "username_do_admin1" "username_do_admin_n" )
+BOTNAME="@nomeDoBot"
 DISTANCIA=150 # distância em metros do ponto cadastrado para o checkin ser aceito
 ```
 
