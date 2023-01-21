@@ -55,10 +55,10 @@ geraIcs(){
 
 distance(){
     local lat1 lon1 lat2 lon2 a d r pi=3.14159265358979323846
-    lat1=$(echo "scale=10; $1 * (3.14159265358979323846 / 180)" | bc -l)
-    lon1=$(echo "scale=10; $2 * (3.14159265358979323846 / 180)" | bc -l)
-    lat2=$(echo "scale=10; $3 * (3.14159265358979323846 / 180)" | bc -l)
-    lon2=$(echo "scale=10; $4 * (3.14159265358979323846 / 180)" | bc -l)
+    lat1=$(echo "scale=10; $1 * ($pi / 180)" | bc -l)
+    lon1=$(echo "scale=10; $2 * ($pi / 180)" | bc -l)
+    lat2=$(echo "scale=10; $3 * ($pi / 180)" | bc -l)
+    lon2=$(echo "scale=10; $4 * ($pi / 180)" | bc -l)
 
     # Fórmula de Haversine
     a=$(echo "scale=10; s((($lat2 - $lat1) / 2))^2 + c($lat1) * c($lat2) * s(($lon2 - $lon1) / 2)^2" | bc -l)
