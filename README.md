@@ -26,11 +26,11 @@ Um admin pode criar novos churrascos com o seguinte comando:
 
 ```/newchurras dd/mm/aaaa HH:MM VENUE```
 
-Esse comando estabelece o dia e a hora limite para o checkin no churrasco. Também vai colocar a mensagem confirmando o agendamento como "pinada" no grupo, além de enviar um arquivo .ics para que seja possível salvar nas agendas.
+Esse comando estabelece o dia e a hora do churrasco. O checkin será válido de 1 hora antes até 2 horas depois do horário definido. Também vai colocar a mensagem confirmando o agendamento como "pinada" no grupo, além de enviar um arquivo .ics para que seja possível salvar nas agendas.
 
 ## Check-in
 
-O checkin só é válido por meio de envio de mensagem **live location** pelo Telegram. A localização normal é ignorada, pois pode ser spoofada pelo próprio Telegram. Caso a localização seja enviada dentro do prazo cadastrado e dentro da distância configurada (hoje em 150m do ponto cadastrado no arquivo `localizacoes`), o checkin será contabilizado.
+O checkin só é válido por meio de envio de mensagem **live location** pelo Telegram. **A localização normal é ignorada**, pois pode ser spoofada pelo próprio Telegram. Caso a localização seja enviada dentro do prazo cadastrado e dentro da distância configurada (hoje em 150m do ponto cadastrado no arquivo `localizacoes`), o checkin será contabilizado.
 
 Sempre que uma mensagem com localização for processada pelo bot, ela será deletada do grupo para evitar poluição (às vezes dá pau, mas paciência)
 
@@ -50,3 +50,6 @@ Esse comando retira o checkin de quem tentou roubar e retira um ponto do malandr
 # TODO
 - [x] Implementar horário mínimo para checkin 
 - [x] Converter cálculo de distância de C para bc
+
+# KNOWN BUGS
+* em algumas situações, após o envio de um checkin, o bot se perde no offset e não processa algumas mensagens.
