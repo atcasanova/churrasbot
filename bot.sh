@@ -41,12 +41,15 @@ offset(){
 
 geraIcs(){
     local nome="Churras @ $1"
-    local inicio="$2T100000"
-    local fim="$2T${3//:}00"
+    local base="${3//:}00"
+    local inicial=$( printf '%06d' $((10#$base-10000)) ) # inicio 1h antes
+    local final=$( printf '%06d' $((10#$base+20000)) ) # final 2h depois
+    local inicio="$2T$inicial"
+    local fim="$2T$final"
     local endereco=$(grep "^$1|" enderecos | cut -f2 -d\|)
 
     filename="$1_$fim.ics"
-    echo -e "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDESCRIPTION:$nome\nSUMMARY:$nome. Checkin válido de 1h antes até 2h depois\nSTATUS:CONFIRMED\nDTSTART;VALUE=DATE-TIME:$inicio\nDTEND;VALUE=DATE-TIME:$fim\nLOCATION:$endereco\nGEO:$4\nEND:VEVENT\nEND:VCALENDAR" > $filename
+    echo -e "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDESCRIPTION:$nome\\\\nCheckin:\\\\nDe ${inicial:0:2}:${inicial:2:2}\\\\nAté ${final:0:2}:${final:2:2}\nSUMMARY:$nome\nSTATUS:CONFIRMED\nDTSTART;VALUE=DATE-TIME:$inicio\nDTEND;VALUE=DATE-TIME:$fim\nLOCATION:$endereco\nGEO:$4\nEND:VEVENT\nEND:VCALENDAR" > $filename
     curl -s -X POST "$apiurl/sendDocument"  \
     -F "chat_id=$CHATID" \
     -F "document=@$filename" \
@@ -63,9 +66,9 @@ distance(){
     # Fórmula de Haversine
     a=$(echo "scale=10; s((($lat2 - $lat1) / 2))^2 + c($lat1) * c($lat2) * s(($lon2 - $lon1) / 2)^2" | bc -l)
     d=$(echo "scale=10; 2 * a(sqrt($a))" | bc -l)
-    r=6378140 # Raio da Terra em km
+    r=6378140 # Raio da Terra em metros
 
-    # Distância em km
+    # Distância em metros, sem casas decimais
     distance=$(echo "$r * $d " | bc)
     distance=${distance%\.*}
 }
