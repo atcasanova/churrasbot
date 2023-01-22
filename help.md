@@ -4,7 +4,7 @@ O checkin só é válido por meio de envio de mensagem *live location* pelo Tele
 
 Sempre que uma mensagem com localização for processada pelo bot, ela será deletada do grupo para evitar poluição (às vezes dá pau, mas paciência)
 
-O admin (eu) pode cancelar checkins de malandros usando fake GPS:
+Um admin pode cancelar checkins de malandros usando fake GPS:
 
 ```
 /fake nome_do_usuario
