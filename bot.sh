@@ -235,8 +235,8 @@ while true; do
             # se por algum motivo o cálculo da distância falhar, a distância máxima aceitavel
             # é considerada.
             data_convertida=${data:3:2}/${data:0:2}/${data:6:4}
-            horario_maximo=$(date -d "$data_convertida $hora:59" +%s)
-            horario_minimo=$(date -d "$data_convertida 11:00:00" +%s)
+            horario_maximo=$(( $(date -d "$data_convertida $hora:59" +%s) + 7200 )) # hora do churras +2h
+            horario_minimo=$(( $(date -d "$data_convertida $hora:00" +%s) - 1800 )) # hora do churras -1h
             agora=$(date +%s)
             echo "agora: $(date -d@$agora)"
             echo "minimo: $(date -d@$horario_minimo)"
