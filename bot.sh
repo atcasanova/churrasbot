@@ -244,6 +244,8 @@ while true; do
             echo "agora: $(date -d@$agora)"
             echo "minimo: $(date -d@$horario_minimo)"
             echo "maximo: $(date -d@$horario_maximo)"
+            echo "distancia: $distance"
+            echo "$latitude $longitude"
 
             if (( ${distance:-$DISTANCIA} <= $DISTANCIA && $agora <= $horario_maximo && $agora >= $horario_minimo )); then
                 
