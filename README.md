@@ -3,9 +3,7 @@
 Esse é o CHURRASBOT, criado para validar a presença dos competidores nos churrascos da temporada. Acabou a conversa fiada, agora saberemos quem são os campeões
 
 ## Setup
-* O arquivo `distance.c` deve ser compilado novamente para evitar problemas de glib
-
-```gcc distance.c -lm -o distance```
+* Os binários `bc` e `curl` devem estar disponíveis no `PATH`
 
 * Deve ser criado um arquivo chamado `env.sh` com o seguinte conteúdo:
 ```bash
@@ -18,13 +16,13 @@ DISTANCIA=150 # distância em metros do ponto cadastrado para o checkin ser acei
 ```
 
 ## Funcionamento
-O admin (eu) deve cadastrar previamente o local onde o churrasco será realizado, com o seguinte comando:
+Um admin deve cadastrar previamente o local onde o churrasco será realizado, com o seguinte comando:
 
 ```/newplace VENUE lat long endereço do local no google maps```
 
 onde `VENUE` é o nome do local a ser utilizado no bot futuramente (sem espaços, por favor) e `lat` e `long` são a latitude e longitude base do lugar.
 
-O admin (eu) pode criar novos churrascos com o seguinte comando:
+Um admin pode criar novos churrascos com o seguinte comando:
 
 ```/newchurras dd/mm/aaaa HH:MM VENUE```
 
@@ -36,16 +34,19 @@ O checkin só é válido por meio de envio de mensagem **live location** pelo Te
 
 Sempre que uma mensagem com localização for processada pelo bot, ela será deletada do grupo para evitar poluição (às vezes dá pau, mas paciência)
 
-O admin (eu) pode cancelar checkins de malandros usando fake GPS:
+Um admin pode cancelar checkins de malandros usando fake GPS:
 
 ```/fake nome_do_usuario```
 
 Esse comando retira o checkin de quem tentou roubar e retira um ponto do malandro no ranking.
 
 ## Demais comandos
-* `/ranking` mostra o ranking de presenças
-* `/qualchurras` mostra o próximo churrasco marcado
+| comando      | função                                                               |
+|--------------|----------------------------------------------------------------------|
+| /ranking     | mostra o ranking de presenças                                        |
+| /qualchurras | mostra o último churras marcado, respondendo a mensagem que o marcou |
+| /help        | mostra instruções para o checkin                                     |
 
 # TODO
 - [x] Implementar horário mínimo para checkin 
-
+- [x] Converter cálculo de distância de C para bc
