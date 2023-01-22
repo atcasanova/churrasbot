@@ -46,7 +46,7 @@ geraIcs(){
     local endereco=$(grep "^$1|" enderecos | cut -f2 -d\|)
 
     filename="$1_$fim.ics"
-    echo -e "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDESCRIPTION:$nome\nSUMMARY:$nome\nSTATUS:CONFIRMED\nDTSTART;VALUE=DATE-TIME:$inicio\nDTEND;VALUE=DATE-TIME:$fim\nLOCATION:$endereco\nGEO:$4\nEND:VEVENT\nEND:VCALENDAR" > $filename
+    echo -e "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDESCRIPTION:$nome\nSUMMARY:$nome. Checkin válido de 1h antes até 2h depois\nSTATUS:CONFIRMED\nDTSTART;VALUE=DATE-TIME:$inicio\nDTEND;VALUE=DATE-TIME:$fim\nLOCATION:$endereco\nGEO:$4\nEND:VEVENT\nEND:VCALENDAR" > $filename
     curl -s -X POST "$apiurl/sendDocument"  \
     -F "chat_id=$CHATID" \
     -F "document=@$filename" \
@@ -118,7 +118,7 @@ newchurras(){
     read pin pin pin pin < CHURRAS
 
     # Caso nenhum erro seja encontrado, cadastra o churras
-    envia "Churras marcado no dia $data. Checkin permitido até ${hora//h/:} na $lugar"
+    envia "Churras marcado no dia $data, às ${hora//h/:} na $lugar. Checkin válido de 1h antes até 2h depois do horário."
     echo "$lugar|$data|${hora//h/:}|$id_msg" > CHURRAS
     
     # despina o churras antigo e pina a mensagem enviada marcando churrasco
