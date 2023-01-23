@@ -57,7 +57,7 @@ geraIcs(){
 }
 
 distance(){
-    local lat1 lon1 lat2 lon2 a d r pi=3.14159265358979323846
+    local lat1 lon1 lat2 lon2 a d r=6378140 pi=3.14159265358979323846
     lat1=$(echo "scale=10; $1 * ($pi / 180)" | bc -l)
     lon1=$(echo "scale=10; $2 * ($pi / 180)" | bc -l)
     lat2=$(echo "scale=10; $3 * ($pi / 180)" | bc -l)
@@ -66,7 +66,6 @@ distance(){
     # Fórmula de Haversine
     a=$(echo "scale=10; s((($lat2 - $lat1) / 2))^2 + c($lat1) * c($lat2) * s(($lon2 - $lon1) / 2)^2" | bc -l)
     d=$(echo "scale=10; 2 * a(sqrt($a))" | bc -l)
-    r=6378140 # Raio da Terra em metros
 
     # Distância em metros, sem casas decimais
     distance=$(echo "$r * $d " | bc)
