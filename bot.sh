@@ -175,6 +175,8 @@ qualchurras(){
 
 ranking(){
     local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -nr | sed 's/^ \{1,\}//g')"
+
+    # edita o ranking antes e enviar considerando penalidades cadastradas
     for penalizado in $(sort -u penalidades); do
         edit=$(grep -E "[0-9] +$penalizado$" <<< "$ranking")
         [ -z "$edit" ] || {
@@ -184,17 +186,36 @@ ranking(){
             ranking=$(echo "$ranking" | sed "s/$edit/$pontos $penalizado (-$debito)/g" | sort -nr)
         }
     done
+
     [ -z "$ranking" ] && envia "Ranking ainda está vazio" || { 
         envia "$ranking" 
+        
+        # geração string para gerar gráfico na API do quickchart
         local users pontos score name payload
         while read score name ; do
             users+="'$name',"
             pontos+="$score,"
         done <<< "$ranking"
+    
+        ## Define o topo do gráfico em 2 pts acima da maior pontuação
         max=$(( $(head -1 <<< $ranking | cut -f1 -d" ") + 2 ))
         options=",options:{scales:{yAxes:[{ticks:{min:0,max:$max,stepSize:1}}]}}"
+
+        ## gera a string com nomes, pontos e opções e faz urlencoding
         payload=$(echo -ne "{type:'bar',data:{labels:[${users::-1}],datasets:[{label:'Presenças',data:[${pontos::-1}]}]}$options}" | perl -pe 's/\W/"%".unpack "H*",$&/gei' )
-        curl "https://quickchart.io/chart?bkg=black&c=$payload" -o chart.png
+
+        ## verifica se esse gráfico já foi pedido antes
+        ## caso já tenha, envia o mesmo. Caso contrário, gera um novo
+        if [ ! -f payload_ranking ]; then
+            echo "$payload" > payload_ranking
+        else
+            if [ "$payload" != "$(cat payload_ranking)" ]; then
+                curl -s "https://quickchart.io/chart?bkg=black&c=$payload" -o chart.png
+                echo "$payload" > payload_ranking
+            fi
+        fi
+
+        # envia a imagem
         curl -s -X POST "$apiurl/sendPhoto"  \
         -F "chat_id=$CHATID" \
         -F "photo=@chart.png" \
