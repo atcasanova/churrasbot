@@ -184,7 +184,8 @@ ranking(){
             ranking=$(echo "$ranking" | sed "s/$edit/$pontos $penalizado (-$debito)/g" | sort -nr)
         }
     done
-    [ -z "$ranking" ] && {
+    [ -z "$ranking" ] && envia "Ranking ainda está vazio" || { 
+        envia "$ranking" 
         local users pontos score name
         while read score name <<< "$ranking"; do
             users+="'$name',"
@@ -196,7 +197,7 @@ ranking(){
         -F "chat_id=$CHATID" \
         -F "document=@chart.png" \
         -F "caption=Ranking"
-        envia "Ranking ainda está vazio" || envia "$ranking"
+        
     }
 }
 
