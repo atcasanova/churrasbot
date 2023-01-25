@@ -188,10 +188,10 @@ ranking(){
     [ -z "$ranking" ] && envia "Ranking ainda está vazio" || { 
         envia "$ranking" 
         local users pontos score name payload
-        while read score name <<< "$ranking"; do
+        while read score name ; do
             users+="'$name',"
             pontos+="$score,"
-        done
+        done <<< "$ranking"
         payload=$(echo -ne "{type:'bar',data:{labels:[${users::-1}],datasets:[{label:'Presenças',data:[${pontos::-1}]}]}}" | perl -pe 's/%([0-9a-f]{2})/pack "H*", $1/gie' )
         curl "https://quickchart.io/chart?bkg=black&c=$payload" -o chart.png
         curl -s -X POST "$apiurl/sendDocument"  \
