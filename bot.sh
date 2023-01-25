@@ -192,7 +192,9 @@ ranking(){
             users+="'$name',"
             pontos+="$score,"
         done <<< "$ranking"
-        payload=$(echo -ne "{type:'bar',data:{labels:[${users::-1}],datasets:[{label:'Presenças',data:[${pontos::-1}]}]}}" | perl -pe 's/\W/"%".unpack "H*",$&/gei' )
+        max=$(( $(head -1 <<< $ranking | cut -f1 -d" ") + 2 ))
+        options=",options:{scales:{yAxes:[{ticks:{min:0,max:$max,stepSize:1}}]}}"
+        payload=$(echo -ne "{type:'bar',data:{labels:[${users::-1}],datasets:[{label:'Presenças',data:[${pontos::-1}]}]}$options}" | perl -pe 's/\W/"%".unpack "H*",$&/gei' )
         curl "https://quickchart.io/chart?bkg=black&c=$payload" -o chart.png
         curl -s -X POST "$apiurl/sendPhoto"  \
         -F "chat_id=$CHATID" \
