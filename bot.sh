@@ -194,9 +194,9 @@ ranking(){
         done <<< "$ranking"
         payload=$(echo -ne "{type:'bar',data:{labels:[${users::-1}],datasets:[{label:'Presenças',data:[${pontos::-1}]}]}}" | perl -pe 's/\W/"%".unpack "H*",$&/gei' )
         curl "https://quickchart.io/chart?bkg=black&c=$payload" -o chart.png
-        curl -s -X POST "$apiurl/sendDocument"  \
+        curl -s -X POST "$apiurl/sendPhoto"  \
         -F "chat_id=$CHATID" \
-        -F "document=@chart.png" \
+        -F "photo=@chart.png" \
         -F "caption=Ranking"
         
     }
