@@ -184,7 +184,20 @@ ranking(){
             ranking=$(echo "$ranking" | sed "s/$edit/$pontos $penalizado (-$debito)/g" | sort -nr)
         }
     done
-    [ -z "$ranking" ] && envia "Ranking ainda está vazio" || envia "$ranking"
+    [ -z "$ranking" ] && {
+        local users pontos score name
+        while read score name <<< "$ranking"; do
+            users+="'$name',"
+            pontos+="$score,"
+        done
+
+        curl "https://quickchart.io/chart?bkg=black&c={type:'bar',data:{labels:[${users::-1}],datasets:[{label:'Presenças',data:[${pontos::-1}]}]}}" -o chart.png
+        curl -s -X POST "$apiurl/sendDocument"  \
+        -F "chat_id=$CHATID" \
+        -F "document=@chart.png" \
+        -F "caption=Ranking"
+        envia "Ranking ainda está vazio" || envia "$ranking"
+    }
 }
 
 fake(){
