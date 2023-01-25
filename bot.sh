@@ -173,7 +173,6 @@ qualchurras(){
     reply "$pin" "O último churrasco cadastrado é dia $dat, checkin válido até $hr, na $loc"
 }
 
-
 ranking(){
     local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -nr | sed 's/^ \{1,\}//g')"
     for penalizado in $(sort -u penalidades); do
