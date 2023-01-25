@@ -173,6 +173,7 @@ qualchurras(){
     reply "$pin" "O último churrasco cadastrado é dia $dat, checkin válido até $hr, na $loc"
 }
 
+
 ranking(){
     local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -nr | sed 's/^ \{1,\}//g')"
     for penalizado in $(sort -u penalidades); do
@@ -186,13 +187,13 @@ ranking(){
     done
     [ -z "$ranking" ] && envia "Ranking ainda está vazio" || { 
         envia "$ranking" 
-        local users pontos score name
+        local users pontos score name payload
         while read score name <<< "$ranking"; do
             users+="'$name',"
             pontos+="$score,"
         done
-
-        curl "https://quickchart.io/chart?bkg=black&c={type:'bar',data:{labels:[${users::-1}],datasets:[{label:'Presenças',data:[${pontos::-1}]}]}}" -o chart.png
+        payload=$(echo -ne "{type:'bar',data:{labels:[${users::-1}],datasets:[{label:'Presenças',data:[${pontos::-1}]}]}}" | perl -pe 's/%([0-9a-f]{2})/pack "H*", $1/gie' )
+        curl "https://quickchart.io/chart?bkg=black&c=$payload" -o chart.png
         curl -s -X POST "$apiurl/sendDocument"  \
         -F "chat_id=$CHATID" \
         -F "document=@chart.png" \
