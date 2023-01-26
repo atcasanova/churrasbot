@@ -1,6 +1,5 @@
 #!/bin/bash
 cd $(dirname $0)
-touch penalidades
 source env.sh
 curl -s $apiurl/getMe >/dev/null
 
@@ -170,22 +169,24 @@ newplace(){
 
 qualchurras(){
     IFS='|' read loc dat hr pin < CHURRAS
-    reply "$pin" "O último churrasco cadastrado é dia $dat, checkin válido até $hr, na $loc"
+    reply "$pin" "O último churrasco cadastrado é dia $dat na $loc"
 }
 
 ranking(){
     local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -nr | sed 's/^ \{1,\}//g')"
 
     # edita o ranking antes e enviar considerando penalidades cadastradas
-    for penalizado in $(sort -u penalidades); do
-        edit=$(grep -E "[0-9] +$penalizado$" <<< "$ranking")
-        [ -z "$edit" ] || {
-            read pontos malandro <<< "$edit"
-            debito=$(grep -c "^$malandro$" penalidades)
-            pontos=$(( $pontos - $debito ))
-            ranking=$(echo "$ranking" | sed "s/$edit/$pontos $penalizado (-$debito)/g" | sort -nr)
-        }
-    done
+    [ -f penalidades ] && {
+        for penalizado in $(sort -u penalidades); do
+            edit=$(grep -E "[0-9] +$penalizado$" <<< "$ranking")
+            [ -z "$edit" ] || {
+                read pontos malandro <<< "$edit"
+                debito=$(grep -c "^$malandro$" penalidades)
+                pontos=$(( $pontos - $debito ))
+                ranking=$(echo "$ranking" | sed "s/$edit/$pontos $penalizado (-$debito)/g" | sort -nr)
+            }
+        done
+    }
 
     [ -z "$ranking" ] && envia "Ranking ainda está vazio" || { 
         envia "$ranking" 
@@ -234,8 +235,7 @@ fake(){
         sed -i "/^$malandro:$loc:/d" $filename && {
             envia "Checkin do $malandro removido"
             echo "$malandro" >> penalidades
-            envia "Presenças:
-$(cut -f1 -d: $filename)"
+            envia "$(cut -f1 -d: $filename)"
         }
     } || envia "$malandro não fez checkin nesse churras"
 }
