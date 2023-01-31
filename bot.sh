@@ -53,6 +53,7 @@ geraIcs(){
     -F "chat_id=$CHATID" \
     -F "document=@$filename" \
     -F "caption=Agendamento do Churras, salve na agenda"
+    rm "$filename"
 }
 
 distance(){
@@ -92,16 +93,16 @@ newchurras(){
     local data=$(grep -Eo "\b(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/(19|20)[0-9]{2}\b" <<< "$*")
     local hora=$(grep -Eo "\b(0[0-9]|1[0-9]|2[0-3])(:|h)[0-5][0-9]\b" <<< "$*")
     local place=$(grep -Eo "\b[A-Z]+\b" <<< "${*^^}")
-    
+    local p d t pin lugar latitude longitude
     # se as variáveis não forem preenchidas
     # dropa erro
     [ -z "$data" ] && { 
         echo "data invalida";
-        return 3;
+        return 1;
     }
     [ -z "$hora" ] && {
         echo "hora invalida";
-        return 3;
+        return 2;
     }
     [ -z "$place" ] && {
         echo "local invalido";
@@ -116,7 +117,13 @@ newchurras(){
         envia "Não sei onde é ${place^^}. Cadastre com /newplace nome lat long endereço";
         return 4;
     }
-    read pin pin pin pin < CHURRAS
+    read p d t pin < CHURRAS
+    
+    # se a variável p for preenchida, existe churras cadastrado
+    # e se o arquivo de presenças dele estiver vazio, deleta
+    [ ! -z "$p" ] && {
+        [ ! -s C_${l// /_}_${d//\//} ] && rm C_${l// /_}_${d//\//}
+    }
 
     # Caso nenhum erro seja encontrado, cadastra o churras
     envia "Churras marcado no dia $data, às ${hora//h/:} na $lugar. Checkin válido de 1h antes até 2h depois do horário."
