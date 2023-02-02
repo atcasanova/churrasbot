@@ -71,7 +71,7 @@ distance(){
 
     # Distância em metros, sem casas decimais
     distance=$(echo "$r * $d " | bc)
-    echo "distancia calcularda: ${distance}"
+    echo "distancia calculada: ${distance}"
     distance=${distance%\.*}
 }
 
@@ -279,7 +279,7 @@ while true; do
             envia "O @$username está a $distance metros da $lugar."
             
             # deleta a mensagem de localização enviada para não poluir o grupo e compensa o offset
-            curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" && offset
+            curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" 
 
             # calcula se a distância e horário são satisfatórios.
             # se por algum motivo o cálculo da distância falhar, a distância máxima aceitavel
