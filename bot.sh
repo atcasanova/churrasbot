@@ -179,8 +179,15 @@ newplace(){
 }
 
 qualchurras(){
-    IFS='|' read loc dat hr pin < CHURRAS
-    reply "$pin" "O último churrasco cadastrado é dia $dat na $loc"
+    local lugar data hora pin now date msg
+    IFS='|' read lugar data hora pin < CHURRAS
+    now=$(date +%s)
+    date=$(date -d "${data:3:2}/${data:0:2}/${data:6:4} $hora" +%s)
+    (( $now >= $date )) && \
+    msg="O último churrasco foi na $lugar, dia $data às $hora. Tem que marcar outro!" || \
+    msg="O próximo churrasco será na $lugar, dia $data às $hora!"
+    
+    reply "$pin" "$msg"
 }
 
 ranking(){
