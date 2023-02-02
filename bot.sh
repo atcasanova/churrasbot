@@ -184,7 +184,7 @@ qualchurras(){
 }
 
 ranking(){
-    local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -nr | sed 's/^ \{1,\}//g')"
+    local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -k1nr -k2| sed 's/^ \{1,\}//g')"
 
     # edita o ranking antes e enviar considerando penalidades cadastradas
     [ -f penalidades ] && {
