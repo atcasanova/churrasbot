@@ -22,6 +22,7 @@ envia(){
     id_msg=$(curl -s -X POST "$apiurl/sendMessage" \
     -F text="$*" \
     -F chat_id=$CHATID | jq -r '.result.message_id')
+    echo
 }
 
 reply(){
@@ -31,6 +32,7 @@ reply(){
     -F text="$*" \
     -F chat_id="$CHATID" \
     -F reply_to_message_id="$reply_to"
+    echo
 }
 
 offset(){
@@ -69,6 +71,7 @@ distance(){
 
     # Distância em metros, sem casas decimais
     distance=$(echo "$r * $d " | bc)
+    echo "distancia calcularda: ${distance}"
     distance=${distance%\.*}
 }
 
@@ -83,6 +86,7 @@ sendLocation(){
         -F "longitude=$long" \
         -F "title=${venue}" \
         -F "address=$address"
+        echo
     }
 }
 
@@ -228,7 +232,7 @@ ranking(){
         -F "chat_id=$CHATID" \
         -F "photo=@chart.png" \
         -F "caption=Ranking"
-        
+        echo        
     }
 }
 
