@@ -306,13 +306,13 @@ while true; do
                 # verifica se o usuário já fez checkin nesse churras antes
                 # caso não tenha feito, checkin aceito
                 grep -q "^$username" C_${lugar// /_}_${data//\//} && {
-                    envia "checkin ja realizado";
+                    envia "Checkin ja realizado";
                 } || {
-                    envia "Checkin realizado."
+                    envia "Checkin realizado ✅"
                     echo "$username:$lugar:$(date +%s)" >> C_${lugar// /_}_${data//\//}
                 }
             else
-                envia "Checkin proibido, ou tá longe ou passou da hora. Chora, @$username"
+                envia "Checkin proibido, ou tá longe ou passou da hora. 🛑 Chora, @$username"
             fi
         
         # se for uma mensagem de localização normal (live_location vazio, mas longitude preenchida)
