@@ -121,7 +121,7 @@ newchurras(){
         envia "Não sei onde é ${place^^}. Cadastre com /newplace nome lat long endereço";
         return 4;
     }
-    read p d t pin < CHURRAS
+    IFS='|' read p d t pin < CHURRAS
     
     # se a variável p for preenchida, existe churras cadastrado
     # e se o arquivo de presenças dele estiver vazio, deleta
