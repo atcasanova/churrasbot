@@ -126,7 +126,7 @@ newchurras(){
     # se a variável p for preenchida, existe churras cadastrado
     # e se o arquivo de presenças dele estiver vazio, deleta
     [ ! -z "$p" ] && {
-        [ ! -s C_${p// /_}_${d//\//} ] && rm C_${p// /_}_${d//\//}
+        [ ! -s C_${p// /_}_${d//\//} ] && rm C_${p// /_}_${d//\//} && echo "C_${p// /_}_${d//\//} vazio. Apagado";
     }
 
     # Caso nenhum erro seja encontrado, cadastra o churras
