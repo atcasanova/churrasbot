@@ -54,4 +54,4 @@ Esse comando retira o checkin de quem tentou roubar e retira um ponto do malandr
 - [x] Converter cálculo de distância de C para bc
 
 # KNOWN BUGS
-* em algumas situações, após o envio de um checkin, o bot se perde no offset e não processa algumas mensagens.
+* ~~em algumas situações, após o envio de um checkin, o bot se perde no offset e não processa algumas mensagens.~~ ✅
