@@ -50,7 +50,7 @@ geraIcs(){
     local endereco=$(grep "^$1|" enderecos | cut -f2 -d\|)
 
     filename="$1_$fim.ics"
-    echo -e "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDESCRIPTION:$nome\\\\nCheckin:\\\\nDe ${inicial:0:2}:${inicial:2:2}\\\\nAté ${final:0:2}:${final:2:2}\nSUMMARY:$nome\nSTATUS:CONFIRMED\nDTSTART;VALUE=DATE-TIME:$inicio\nDTEND;VALUE=DATE-TIME:$fim\nLOCATION:$endereco\nGEO:$4\nEND:VEVENT\nEND:VCALENDAR" > $filename
+    echo -e "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDESCRIPTION:$nome\\\\nCheckin:\\\\nDe ${inicial:0:2}:${inicial:2:2}\\\\nAté ${final:0:2}:${final:2:2}\nSUMMARY:$nome\nSTATUS:CONFIRMED\nDTSTART;VALUE=DATE-TIME:$inicio\nDTEND;VALUE=DATE-TIME:$fim\nLOCATION:$endereco\nEND:VEVENT\nEND:VCALENDAR" > $filename
     curl -s -X POST "$apiurl/sendDocument"  \
     -F "chat_id=$CHATID" \
     -F "document=@$filename" \
@@ -135,10 +135,10 @@ newchurras(){
     
     # despina o churras antigo e pina a mensagem enviada marcando churrasco
     curl -s "$apiurl/unpinChatMessage?chat_id=$CHATID&message_id=$pin"
-    curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$id_msg"
+    curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$id_msg&disable_notification=false"
 
     # envia o arquivo.ics
-    geraIcs "$lugar" "${data:6:4}${data:3:2}${data:0:2}" "${hora//h/:}" "$latitude;$longitude"
+    geraIcs "$lugar" "${data:6:4}${data:3:2}${data:0:2}" "${hora//h/:}"
     sendLocation "$lugar"
 
     # cria o arquivo de presença pro churrasco
@@ -306,7 +306,7 @@ while true; do
                 # verifica se o usuário já fez checkin nesse churras antes
                 # caso não tenha feito, checkin aceito
                 grep -q "^$username" C_${lugar// /_}_${data//\//} && {
-                    envia "Checkin ja realizado";
+                    envia "Checkin ja realizado ☑";
                 } || {
                     envia "Checkin realizado ✅"
                     echo "$username:$lugar:$(date +%s)" >> C_${lugar// /_}_${data//\//}
