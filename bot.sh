@@ -14,7 +14,6 @@ isAdmin(){
     for admin in ${ADMINS[@]}; do
         [ "$username" == "$admin" ] && return 0;
     done
-    reply $messageId "kkkk coitadinho do @$username"
     return 1
 }
 
@@ -215,31 +214,33 @@ ranking(){
             users+="'$name',"
             pontos+="$score,"
         done <<< "$ranking"
-    
-        ## Define o topo do gráfico em 2 pts acima da maior pontuação
-        max=$(( $(head -1 <<< $ranking | cut -f1 -d" ") + 2 ))
-        options=",options:{scales:{yAxes:[{ticks:{min:0,max:$max,stepSize:1}}]}}"
+        
+        isAdmin $username && {
+            ## Define o topo do gráfico em 2 pts acima da maior pontuação
+            max=$(( $(head -1 <<< $ranking | cut -f1 -d" ") + 2 ))
+            options=",options:{scales:{yAxes:[{ticks:{min:0,max:$max,stepSize:1}}]}}"
 
-        ## gera a string com nomes, pontos e opções e faz urlencoding
-        payload=$(echo -ne "{type:'bar',data:{labels:[${users::-1}],datasets:[{label:'Presenças',data:[${pontos::-1}]}]}$options}" | perl -pe 's/\W/"%".unpack "H*",$&/gei' )
+            ## gera a string com nomes, pontos e opções e faz urlencoding
+            payload=$(echo -ne "{type:'bar',data:{labels:[${users::-1}],datasets:[{label:'Presenças',data:[${pontos::-1}]}]}$options}" | perl -pe 's/\W/"%".unpack "H*",$&/gei' )
 
-        ## verifica se esse gráfico já foi pedido antes
-        ## caso já tenha, envia o mesmo. Caso contrário, gera um novo
-        if [ ! -f payload_ranking ]; then
-            echo "$payload" > payload_ranking
-        else
-            if [ "$payload" != "$(cat payload_ranking)" ]; then
-                curl -s "https://quickchart.io/chart?bkg=black&c=$payload" -o chart.png
+            ## verifica se esse gráfico já foi pedido antes
+            ## caso já tenha, envia o mesmo. Caso contrário, gera um novo
+            if [ ! -f payload_ranking ]; then
                 echo "$payload" > payload_ranking
+            else
+                if [ "$payload" != "$(cat payload_ranking)" ]; then
+                    curl -s "https://quickchart.io/chart?bkg=black&c=$payload" -o chart.png
+                    echo "$payload" > payload_ranking
+                fi
             fi
-        fi
 
-        # envia a imagem
-        curl -s -X POST "$apiurl/sendPhoto"  \
-        -F "chat_id=$CHATID" \
-        -F "photo=@chart.png" \
-        -F "caption=Ranking"
-        echo        
+            # envia a imagem
+            curl -s -X POST "$apiurl/sendPhoto"  \
+            -F "chat_id=$CHATID" \
+            -F "photo=@chart.png" \
+            -F "caption=Ranking"
+            echo
+        }
     }
 }
 
