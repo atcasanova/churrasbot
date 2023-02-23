@@ -290,6 +290,56 @@ churrasAtivo(){
     return 1
 }
 
+handleLiveLocation(){
+    offset
+    # pegar data, hora e localização do churras atual
+    churrasAtivo && {
+        alvo=$(grep -m1 "^$lugar|" localizacoes)
+        IFS='|' read nome lat long <<< "$alvo"
+
+        # calcula distância do usuário até o ponto cadastrado
+        distance $lat $long $latitude $longitude
+        envia "O @$username está a $distance metros da $lugar."
+
+        # deleta a mensagem de localização enviada para não poluir o grupo e compensa o offset
+        curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" 
+
+        # calcula se a distância e horário são satisfatórios.
+        # se por algum motivo o cálculo da distância falhar, a distância máxima aceitavel
+        # é considerada.
+        echo "distancia: $distance"
+        echo "$latitude $longitude"
+
+        if (( ${distance:-$DISTANCIA} <= $DISTANCIA )); then
+                        
+            # verifica se o usuário já fez checkin nesse churras antes
+            # caso não tenha feito, checkin aceito
+            grep -q "^$username" C_${lugar// /_}_${data//\//} && {
+                envia "Checkin ja realizado ☑";
+            } || {
+                envia "Checkin realizado ✅"
+                echo "$username:$lugar:$(date +%s)" >> C_${lugar// /_}_${data//\//}
+            }
+        else
+            envia "Checkin proibido! 🛑 Chora, @$username"
+        fi
+    }
+}
+
+handleMessage(){
+    offset
+    comando="$(echo ${text//_/ }| sed -e 's/ \+$//g' | sed "s/$BOTNAME//g")"
+    echo ":$comando:"
+    case "$comando" in
+        /newchurras\ *)   isAdmin && newchurras ${comando//\/newchurras /}; break;;
+        /newplace\ *)     isAdmin && newplace ${comando//\/newplace /}; break;;
+        /fake\ *)         isAdmin && fake ${comando//\/fake /}; break;;
+        /qualchurras)     qualchurras; break;;
+        /ranking)         ranking; break;;
+        /help)            ajuda; break;;
+    esac
+}
+
 offset=$(cat offset)
 while true; do 
     for linha in $(curl -s -X POST --data "offset=$offset&limit=1" "$apiurl/getUpdates" | \
@@ -306,58 +356,14 @@ while true; do
         # se a mensagem enviada for uma live location, o campo 'live_period' do JSON vem prenchido
         # então se ele não for nulo, tratamos a mensagem
         if [ "$live_period" != "null" ]; then
-            offset
-
-            # pegar data, hora e localização do churras atual
-            churrasAtivo && {
-                alvo=$(grep -m1 "^$lugar|" localizacoes)
-                IFS='|' read nome lat long <<< "$alvo"
-
-                # calcula distância do usuário até o ponto cadastrado
-                distance $lat $long $latitude $longitude
-                envia "O @$username está a $distance metros da $lugar."
-                
-                # deleta a mensagem de localização enviada para não poluir o grupo e compensa o offset
-                curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" 
-
-                # calcula se a distância e horário são satisfatórios.
-                # se por algum motivo o cálculo da distância falhar, a distância máxima aceitavel
-                # é considerada.
-                echo "distancia: $distance"
-                echo "$latitude $longitude"
-
-                if (( ${distance:-$DISTANCIA} <= $DISTANCIA )); then
-                
-                    # verifica se o usuário já fez checkin nesse churras antes
-                    # caso não tenha feito, checkin aceito
-                    grep -q "^$username" C_${lugar// /_}_${data//\//} && {
-                        envia "Checkin ja realizado ☑";
-                    } || {
-                        envia "Checkin realizado ✅"
-                        echo "$username:$lugar:$(date +%s)" >> C_${lugar// /_}_${data//\//}
-                    }
-                else
-                    envia "Checkin proibido! 🛑 Chora, @$username"
-                fi
-            }        
+            handleLiveLocation
         # se for uma mensagem de localização normal (live_location vazio, mas longitude preenchida)
         # apaga a mensagem e compensa o offset
         elif [ "$longitude" != "null" ]; then
             echo "Mensagem de localização detectada vindo de @$username. Tentando apagar $messageId em $offset"
             curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" && offset
         else
-            offset
-            comando="$(echo ${text//_/ }| sed -e 's/ \+$//g' | sed "s/$BOTNAME//g")"
-            echo ":$comando:"
-            case "$comando" in
-                /newchurras\ *)   isAdmin && newchurras ${comando//\/newchurras /}; break;;
-                /newplace\ *)     isAdmin && newplace ${comando//\/newplace /}; break;;
-                /fake\ *)         isAdmin && fake ${comando//\/fake /}; break;;
-                /qualchurras)     qualchurras; break;;
-                /ranking)         ranking; break;;
-                /help)            ajuda; break;;
-            esac
-            continue
+            handleMessage
         fi
     done
 done
