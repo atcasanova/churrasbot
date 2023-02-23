@@ -261,17 +261,17 @@ ranking(){
 
 fake(){
     (( $# != 1 )) && return 2;
-    local loc dat hr pin
-    IFS='|' read loc dat hr pin < CHURRAS
-    filename=C_${loc// /_}_${dat//\//}
-    local malandro="$1"
-    grep -qi "^$malandro:" $filename && {
-        sed -i "/^$malandro:$loc:/d" $filename && {
-            envia "Checkin do $malandro removido"
-            echo "$malandro" >> penalidades
-            envia "$(cut -f1 -d: $filename)"
+    churrasAtivo && {
+        filename=C_${lugar// /_}_${data//\//}
+        local malandro="$1"
+        grep -qi "^$malandro:" $filename && {
+            sed -i "/^$malandro:$loc:/d" $filename && {
+                envia "Checkin do $malandro removido"
+                echo "$malandro" >> penalidades
+                envia "$(cut -f1 -d: $filename)"
+            }
         }
-    } || envia "$malandro não fez checkin nesse churras"
+    }
 }
 
 churrasAtivo(){
