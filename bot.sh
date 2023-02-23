@@ -96,9 +96,10 @@ clearChurras(){
         churras_timestamp=$(( $(date -d "${d:3:2}/${d:0:2}/${d:6:4} $t" +%s) + 7200 ))
         (( churras_timestamp < now )) || continue
         [ ! -z "$p" ] && {
-            [ ! -s C_${p// /_}_${d//\//} ] && rm C_${p// /_}_${d//\//} && echo "C_${p// /_}_${d//\//} vazio. Apagado";
+            [ -e C_${p// /_}_${d//\//} -a ! -s C_${p// /_}_${d//\//} ] && rm C_${p// /_}_${d//\//} && echo "C_${p// /_}_${d//\//} vazio. Apagado";
         }
         echo "Churras $p em $d $t ja passou"
+        sed -i "/$pin$/d" CHURRAS
         curl -s "$apiurl/unpinChatMessage?chat_id=$CHATID&message_id=$pin"
     done < CHURRAS
 }
