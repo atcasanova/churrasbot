@@ -89,6 +89,20 @@ sendLocation(){
     }
 }
 
+clearChurras(){
+    local p d t pin now churras_timestamp
+    now=$(date +%s)
+    while IFS='|' read p d t pin; do
+        churras_timestamp=$(( $(date -d "${d:3:2}/${d:0:2}/${d:6:4} $t" +%s) + 7200 ))
+        (( churras_timestamp < now )) || continue
+        [ ! -z "$p" ] && {
+            [ ! -s C_${p// /_}_${d//\//} ] && rm C_${p// /_}_${d//\//} && echo "C_${p// /_}_${d//\//} vazio. Apagado";
+        }
+        echo "Churras $p em $d $t ja passou"
+        curl -s "$apiurl/unpinChatMessage?chat_id=$CHATID&message_id=$pin"
+    done < CHURRAS
+}
+
 newchurras(){
     (( $# != 3 )) && return 2
     # pegar variáveis na posição correta
@@ -120,20 +134,15 @@ newchurras(){
         envia "Não sei onde é ${place^^}. Cadastre com /newplace nome lat long endereço";
         return 4;
     }
-    IFS='|' read p d t pin < CHURRAS
     
-    # se a variável p for preenchida, existe churras cadastrado
-    # e se o arquivo de presenças dele estiver vazio, deleta
-    [ ! -z "$p" ] && {
-        [ ! -s C_${p// /_}_${d//\//} ] && rm C_${p// /_}_${d//\//} && echo "C_${p// /_}_${d//\//} vazio. Apagado";
-    }
+    # chama a função de limpar churras já passados
+    clearChurras
 
     # Caso nenhum erro seja encontrado, cadastra o churras
     envia "Churras marcado no dia $data, às ${hora//h/:} na $lugar. Checkin válido de 1h antes até 2h depois do horário."
-    echo "$lugar|$data|${hora//h/:}|$id_msg" > CHURRAS
+    echo "$lugar|$data|${hora//h/:}|$id_msg" >> CHURRAS
     
     # despina o churras antigo e pina a mensagem enviada marcando churrasco
-    curl -s "$apiurl/unpinChatMessage?chat_id=$CHATID&message_id=$pin"
     curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$id_msg&disable_notification=false"
 
     # envia o arquivo.ics
@@ -178,14 +187,19 @@ newplace(){
 }
 
 qualchurras(){
-    local lugar data hora pin now date msg
-    IFS='|' read lugar data hora pin < CHURRAS
+    clearChurras
+    local p d t pin now churras_timestamp ordem lugar data hora pin now date msg
     now=$(date +%s)
-    date=$(date -d "${data:3:2}/${data:0:2}/${data:6:4} $hora" +%s)
-    (( $now >= $date )) && \
-    msg="O último churrasco foi na $lugar, dia $data às $hora. Tem que marcar outro!" || \
-    msg="O próximo churrasco será na $lugar, dia $data às $hora!"
-    
+    while IFS='|' read p d t pin; do
+        churras_timestamp=$(date -d "${d:3:2}/${d:0:2}/${d:6:4} $t" +%s)
+        (( churras_timestamp > now )) || continue
+        ordem+="$churras_timestamp|$p|$d|$t|$pin\n"
+    done < CHURRAS
+    ordem=${ordem::-1}
+    IFS='|' read churras_timestamp lugar data hora pin <<< "$(echo -e "$ordem" | sort -n | head -1)"
+    (( ${churras_timestamp:-0} > now )) && \
+    msg="O próximo churrasco será na $lugar, dia $data às $hora!" || \
+    msg="Tá precisando cadastrar um churras novo! Tem nada chegando!"
     reply "$pin" "$msg"
 }
 
@@ -259,6 +273,22 @@ fake(){
     } || envia "$malandro não fez checkin nesse churras"
 }
 
+churrasAtivo(){
+    clearChurras
+    local p d t pin now now date msg
+    now=$(date +%s)
+    while IFS='|' read p d t pin; do
+        horario_minimo=$(( $(date -d "${d:3:2}/${d:0:2}/${d:6:4} $t" +%s) - 1800 ))
+        horario_maximo=$(( $(date -d "${d:3:2}/${d:0:2}/${d:6:4} $t" +%s) + 7200 ))
+        (( $now <= $churras_fim && $now >= $churras_inicio )) && {
+            IFS='|' read lugar data hora pin <<< "$p|$d|$t|$pin"
+            echo "$lugar $data $hora $pin ativo"
+            return 0
+        }
+    done < CHURRAS
+    return 1
+}
+
 offset=$(cat offset)
 while true; do 
     for linha in $(curl -s -X POST --data "offset=$offset&limit=1" "$apiurl/getUpdates" | \
@@ -278,44 +308,37 @@ while true; do
             offset
 
             # pegar data, hora e localização do churras atual
-            IFS='|' read lugar data hora lixo < CHURRAS
-            alvo=$(grep -m1 "^$lugar|" localizacoes)
-            IFS='|' read nome lat long <<< "$alvo"
+            churrasAtivo && {
+                alvo=$(grep -m1 "^$lugar|" localizacoes)
+                IFS='|' read nome lat long <<< "$alvo"
 
-            # calcula distância do usuário até o ponto cadastrado
-            distance $lat $long $latitude $longitude
-            envia "O @$username está a $distance metros da $lugar."
-            
-            # deleta a mensagem de localização enviada para não poluir o grupo e compensa o offset
-            curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" 
-
-            # calcula se a distância e horário são satisfatórios.
-            # se por algum motivo o cálculo da distância falhar, a distância máxima aceitavel
-            # é considerada.
-            data_convertida=${data:3:2}/${data:0:2}/${data:6:4}
-            horario_maximo=$(( $(date -d "$data_convertida $hora:59" +%s) + 7200 )) # hora do churras +2h
-            horario_minimo=$(( $(date -d "$data_convertida $hora:00" +%s) - 1800 )) # hora do churras -1h
-            agora=$(date +%s)
-            echo "agora: $(date -d@$agora)"
-            echo "minimo: $(date -d@$horario_minimo)"
-            echo "maximo: $(date -d@$horario_maximo)"
-            echo "distancia: $distance"
-            echo "$latitude $longitude"
-
-            if (( ${distance:-$DISTANCIA} <= $DISTANCIA && $agora <= $horario_maximo && $agora >= $horario_minimo )); then
+                # calcula distância do usuário até o ponto cadastrado
+                distance $lat $long $latitude $longitude
+                envia "O @$username está a $distance metros da $lugar."
                 
-                # verifica se o usuário já fez checkin nesse churras antes
-                # caso não tenha feito, checkin aceito
-                grep -q "^$username" C_${lugar// /_}_${data//\//} && {
-                    envia "Checkin ja realizado ☑";
-                } || {
-                    envia "Checkin realizado ✅"
-                    echo "$username:$lugar:$(date +%s)" >> C_${lugar// /_}_${data//\//}
-                }
-            else
-                envia "Checkin proibido, ou tá longe ou passou da hora. 🛑 Chora, @$username"
-            fi
-        
+                # deleta a mensagem de localização enviada para não poluir o grupo e compensa o offset
+                curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" 
+
+                # calcula se a distância e horário são satisfatórios.
+                # se por algum motivo o cálculo da distância falhar, a distância máxima aceitavel
+                # é considerada.
+                echo "distancia: $distance"
+                echo "$latitude $longitude"
+
+                if (( ${distance:-$DISTANCIA} <= $DISTANCIA )); then
+                
+                    # verifica se o usuário já fez checkin nesse churras antes
+                    # caso não tenha feito, checkin aceito
+                    grep -q "^$username" C_${lugar// /_}_${data//\//} && {
+                        envia "Checkin ja realizado ☑";
+                    } || {
+                        envia "Checkin realizado ✅"
+                        echo "$username:$lugar:$(date +%s)" >> C_${lugar// /_}_${data//\//}
+                    }
+                else
+                    envia "Checkin proibido! 🛑 Chora, @$username"
+                fi
+            }        
         # se for uma mensagem de localização normal (live_location vazio, mas longitude preenchida)
         # apaga a mensagem e compensa o offset
         elif [ "$longitude" != "null" ]; then
