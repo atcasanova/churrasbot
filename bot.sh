@@ -331,12 +331,12 @@ handleMessage(){
     comando="$(echo ${text//_/ }| sed -e 's/ \+$//g' | sed "s/$BOTNAME//g")"
     echo ":$comando:"
     case "$comando" in
-        /newchurras\ *)   isAdmin && newchurras ${comando//\/newchurras /}; break;;
-        /newplace\ *)     isAdmin && newplace ${comando//\/newplace /}; break;;
-        /fake\ *)         isAdmin && fake ${comando//\/fake /}; break;;
-        /qualchurras)     qualchurras; break;;
-        /ranking)         ranking; break;;
-        /help)            ajuda; break;;
+        /newchurras\ *)   isAdmin && newchurras ${comando//\/newchurras /};;
+        /newplace\ *)     isAdmin && newplace ${comando//\/newplace /};;
+        /fake\ *)         isAdmin && fake ${comando//\/fake /};;
+        /qualchurras)     qualchurras;;
+        /ranking)         ranking;;
+        /help)            ajuda;;
     esac
 }
 
