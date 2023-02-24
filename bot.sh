@@ -90,13 +90,14 @@ sendLocation(){
 }
 
 clearChurras(){
-    local p d t pin now churras_timestamp
+    local p d t pin now churras_timestamp filename
     now=$(date +%s)
     while IFS='|' read p d t pin; do
         churras_timestamp=$(( $(date -d "${d:3:2}/${d:0:2}/${d:6:4} $t" +%s) + 7200 ))
         (( churras_timestamp < now )) || continue
         [ ! -z "$p" ] && {
-            [ -e C_${p// /_}_${d//\//} -a ! -s C_${p// /_}_${d//\//} ] && rm C_${p// /_}_${d//\//} && echo "C_${p// /_}_${d//\//} vazio. Apagado";
+            filename="C_${p// /_}_${d//\//}"
+            [ -e $filename -a ! -s $filename ] && rm $filename && echo "$filename vazio. Apagado";
         }
         echo "Churras $p em $d $t ja passou"
         sed -i "/$pin$/d" CHURRAS
@@ -143,7 +144,7 @@ newchurras(){
     envia "Churras marcado no dia $data, às ${hora//h/:} na $lugar. Checkin válido de 1h antes até 2h depois do horário."
     echo "$lugar|$data|${hora//h/:}|$id_msg" >> CHURRAS
     
-    # despina o churras antigo e pina a mensagem enviada marcando churrasco
+    # pina a mensagem enviada marcando churrasco
     curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$id_msg&disable_notification=false"
 
     # envia o arquivo.ics
@@ -308,14 +309,14 @@ handleLiveLocation(){
         echo "$latitude $longitude"
 
         if (( ${distance:-$DISTANCIA} <= $DISTANCIA )); then
-                        
+            local filename="C_${lugar// /_}_${data//\//}"
             # verifica se o usuário já fez checkin nesse churras antes
             # caso não tenha feito, checkin aceito
-            grep -q "^$username" C_${lugar// /_}_${data//\//} && {
+            grep -q "^$username" $filename && {
                 envia "Checkin ja realizado ☑";
             } || {
                 envia "Checkin realizado ✅"
-                echo "$username:$lugar:$(date +%s)" >> C_${lugar// /_}_${data//\//}
+                echo "$username:$lugar:$(date +%s)" >> $filename
             }
         else
             envia "Checkin proibido! 🛑 Chora, @$username"
