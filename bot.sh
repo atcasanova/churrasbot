@@ -192,7 +192,8 @@ qualchurras(){
     local p d t pin now churras_timestamp ordem lugar data hora pin now date msg
     now=$(date +%s)
     while IFS='|' read p d t pin; do
-        churras_timestamp=$(date -d "${d:3:2}/${d:0:2}/${d:6:4} $t" +%s)
+        # fazer conta pra saber se tá rolando agora
+        churras_timestamp=$(( $(date -d "${d:3:2}/${d:0:2}/${d:6:4} $t" +%s) + 7200 ))
         (( churras_timestamp > now )) || continue
         ordem+="$churras_timestamp|$p|$d|$t|$pin\n"
     done < CHURRAS
@@ -240,13 +241,9 @@ ranking(){
 
             ## verifica se esse gráfico já foi pedido antes
             ## caso já tenha, envia o mesmo. Caso contrário, gera um novo
-            if [ ! -f payload_ranking ]; then
+            if [ ! -f payload_ranking -o "$payload" != "$(cat payload_ranking)" ]; then
                 echo "$payload" > payload_ranking
-            else
-                if [ "$payload" != "$(cat payload_ranking)" ]; then
-                    curl -s "https://quickchart.io/chart?bkg=black&c=$payload" -o chart.png
-                    echo "$payload" > payload_ranking
-                fi
+                curl -s "https://quickchart.io/chart?bkg=black&c=$payload" -o chart.png
             fi
 
             # envia a imagem
@@ -265,7 +262,7 @@ fake(){
         filename=C_${lugar// /_}_${data//\//}
         local malandro="$1"
         grep -qi "^$malandro:" $filename && {
-            sed -i "/^$malandro:$loc:/d" $filename && {
+            sed -i "/^$malandro:/d" $filename && {
                 envia "Checkin do $malandro removido"
                 echo "$malandro" >> penalidades
                 envia "$(cut -f1 -d: $filename)"
