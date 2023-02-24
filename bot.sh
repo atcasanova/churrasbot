@@ -320,7 +320,7 @@ handleLiveLocation(){
         else
             envia "Checkin proibido! 🛑 Chora, @$username"
         fi
-    }
+    } || curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" 
 }
 
 handleMessage(){
