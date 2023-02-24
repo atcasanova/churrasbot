@@ -111,7 +111,7 @@ newchurras(){
     local data=$(grep -Eo "\b(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/(19|20)[0-9]{2}\b" <<< "$*")
     local hora=$(grep -Eo "\b(0[0-9]|1[0-9]|2[0-3])(:|h)[0-5][0-9]\b" <<< "$*")
     local place=$(grep -Eo "\b[A-Z]+\b" <<< "${*^^}")
-    local p d t pin lugar latitude longitude
+    local lugar latitude longitude
     # se as variáveis não forem preenchidas
     # dropa erro
     [ -z "$data" ] && { 
@@ -189,7 +189,7 @@ newplace(){
 
 qualchurras(){
     clearChurras
-    local p d t pin now churras_timestamp ordem lugar data hora pin now date msg
+    local p d t pin now churras_timestamp ordem lugar data hora msg
     now=$(date +%s)
     while IFS='|' read p d t pin; do
         # fazer conta pra saber se tá rolando agora
@@ -223,15 +223,15 @@ ranking(){
 
     [ -z "$ranking" ] && envia "Ranking ainda está vazio" || { 
         envia "$ranking" 
-        
-        # geração string para gerar gráfico na API do quickchart
-        local users pontos score name payload
-        while read score name ; do
-            users+="'$name',"
-            pontos+="$score,"
-        done <<< "$ranking"
-        
+      
         isAdmin $username && {
+            # geração string para gerar gráfico na API do quickchart
+            local users pontos score name payload
+            while read score name ; do
+                users+="'$name',"
+                pontos+="$score,"
+            done <<< "$ranking"
+
             ## Define o topo do gráfico em 2 pts acima da maior pontuação
             max=$(( $(head -1 <<< $ranking | cut -f1 -d" ") + 2 ))
             options=",options:{scales:{yAxes:[{ticks:{min:0,max:$max,stepSize:1}}]}}"
@@ -273,7 +273,7 @@ fake(){
 
 churrasAtivo(){
     clearChurras
-    local p d t pin now now date msg
+    local p d t pin now
     now=$(date +%s)
     while IFS='|' read p d t pin; do
         horario_minimo=$(( $(date -d "${d:3:2}/${d:0:2}/${d:6:4} $t" +%s) - 1800 ))
