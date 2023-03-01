@@ -1,6 +1,7 @@
 qualchurras(){
     clearChurras
     churrasAtivo && {
+        echo $pin $data $hora $lugar
         reply "$pin" "Tá rolando esse aqui agora!"
         return
     }
