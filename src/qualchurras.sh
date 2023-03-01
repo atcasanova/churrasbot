@@ -1,5 +1,9 @@
 qualchurras(){
     clearChurras
+    churrasAtivo && {
+        reply "$pin" "Tá rolando esse aqui agora!"
+        return
+    }
     local p d t pin now churras_timestamp ordem lugar data hora msg
     now=$(date +%s)
     while IFS='|' read p d t pin; do
