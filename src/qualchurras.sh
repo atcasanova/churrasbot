@@ -1,7 +1,7 @@
 qualchurras(){
     clearChurras
     churrasAtivo && {
-        reply "$pin" "Tá rolando esse aqui agora!"
+        reply "$pin" "Tá rolando esse churras agora, na $lugar!"
         return
     }
     local p d t pin now churras_timestamp ordem lugar data hora msg
