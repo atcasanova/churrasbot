@@ -1,14 +1,18 @@
 #!/bin/bash
 cd $(dirname $0)
 
-for function in src/*.sh; do
-    source $function
-done
+load_functions(){
+    for function in src/*.sh; do
+        source $function
+    done
+}
+load_functions
 
 check_env
 
 offset=$(cat offset)
-while true; do 
+while true; do
+    load_functions
     for linha in $(curl -s -X POST --data "offset=$offset&limit=1" "$apiurl/getUpdates" | \
     jq '.result[] | "\(.update_id)|\(.message.message_id)|\(.message.chat.id)|\(.message.from.username)|\(.message.date)|\(.message.location.latitude)|\(.message.location.longitude)|\(.message.location.live_period)|\(.message.text)"' -r| tr '\n' ' ' | sed 's/\\n//g' | sed 's/ /_/g' 2>/dev/null); do
 
