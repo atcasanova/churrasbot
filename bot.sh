@@ -1,7 +1,9 @@
 #!/bin/bash
 cd $(dirname $0)
 
-source src/*.sh
+for function in src/*.sh; do
+    source $function
+done
 
 check_env
 
