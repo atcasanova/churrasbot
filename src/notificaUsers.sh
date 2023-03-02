@@ -1,3 +1,4 @@
+#!/bin/bash
 # função para notificar com @mention todos os usuários
 # é feito por userId para continuar notificando se o usuário mudar o nick
 notificaUsers(){
@@ -9,4 +10,5 @@ notificaUsers(){
     done < members
     msg=${msg::-1}
     msg+="! Tem churras marcado!"
+    envia "$msg"
 }
