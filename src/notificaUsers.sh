@@ -3,7 +3,7 @@
 notificaUsers(){
     local id username msg="Atenção! "
     while read id; do
-        username=$(curl -s "$apiurl/getChatMember?chat_id=$CHATID&user_id=$id")
+        username=$(curl -s "$apiurl/getChatMember?chat_id=$CHATID&user_id=$id" | jq -r '.result.user.username')
         [ "$username" == "null" ] && continue
         msg+="@$username "
     done < members
