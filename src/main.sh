@@ -19,6 +19,7 @@ main(){
         elif [ "$longitude" != "null" ]; then
             echo "Mensagem de localização detectada vindo de @$username. Tentando apagar $messageId em $offset"
             curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" && offset
+            envia "Ei, @$username! Checkin tem que ser feito com Live Location"
         else
             handleMessage
         fi
