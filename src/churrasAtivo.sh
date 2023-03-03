@@ -8,7 +8,7 @@ churrasAtivo(){
         (( $now <= $horario_maximo && $now >= $horario_minimo )) && {
             IFS='|' read lugar data hora pin <<< "$p|$d|$t|$id"
             echo "$lugar $data $hora $pin ativo"
-            return 0
+            return
         }
     done < CHURRAS
     return 1
