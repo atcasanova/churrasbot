@@ -27,7 +27,7 @@ ranking(){
 
             ## Define o topo do gráfico em 2 pts acima da maior pontuação
             max=$(( $(head -1 <<< $ranking | cut -f1 -d" ") + 2 ))
-            options=",options:{scales:{yAxes:[{ticks:{beginAtZero:true,min:0,max:$max,stepSize:1}}]}}"
+            options=",options:{scales:{xAxes:[{ticks:{beginAtZero:true,min:0,max:$max,stepSize:1}}]}}"
 
             ## gera a string com nomes, pontos e opções e faz urlencoding
             payload=$(echo -ne "{type:'horizontalBar',data:{labels:[${users::-1}],datasets:[{label:'Presenças',data:[${pontos::-1}]}]}$options}" | perl -pe 's/\W/"%".unpack "H*",$&/gei' )
