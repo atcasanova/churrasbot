@@ -1,7 +1,7 @@
 qualchurras(){
     clearChurras
     churrasAtivo && {
-        reply "$pin" "Tá rolando esse churras agora, na $lugar!"
+        envia "$pin" "Tá rolando esse churras agora, na $lugar!"
         return
     }
     local p d t pin now churras_timestamp ordem lugar data hora msg
@@ -17,5 +17,5 @@ qualchurras(){
     (( ${churras_timestamp:-0} > now )) && \
     msg="O próximo churrasco será na $lugar, dia $data às $hora!" || \
     msg="Tá precisando cadastrar um churras novo! Tem nada chegando!"
-    reply "$pin" "$msg"
+    envia "$pin" "$msg"
 }
