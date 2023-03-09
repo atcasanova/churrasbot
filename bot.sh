@@ -5,10 +5,8 @@ load_functions(){
     for function in src/*.sh; do
         source $function
     done
+    check_env
 }
-load_functions
-
-check_env
 
 offset=$(cat offset)
 while true; do
