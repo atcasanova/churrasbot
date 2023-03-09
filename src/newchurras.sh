@@ -34,8 +34,13 @@ newchurras(){
     clearChurras
 
     # Caso nenhum erro seja encontrado, cadastra o churras
-    envia "Churras marcado no dia $data, às ${hora//h/:} na $lugar. Checkin válido de 1h antes até 2h depois do horário."
-    echo "$lugar|$data|${hora//h/:}|$id_msg" >> CHURRAS
+    timeLimit && { 
+        envia "Churras marcado no dia $data, às ${hora//h/:} na $lugar. Checkin válido de 1h antes até 2h depois do horário."
+        echo "$lugar|$data|${hora//h/:}|$id_msg" >> CHURRAS
+    } || {
+        envia "Churras deve ser marcado com no mínimo 18h de antecedência"
+        return 3
+    }
     
     # pina a mensagem enviada marcando churrasco
     curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$id_msg&disable_notification=false"
