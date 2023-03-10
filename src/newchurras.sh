@@ -21,6 +21,11 @@ newchurras(){
         return 3;
     }
     
+    [ ! -f localizacoes ] && {
+        envia "Nenhuma localização disponível. Cadastre antes com /newplace"
+        return 2
+    }
+
     IFS='|' read lugar latitude longitude <<< "$(grep "^${place^^}|" localizacoes)"
     
     # caso o lugar não seja encontrado no arquivo de localizações
