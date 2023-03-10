@@ -4,6 +4,7 @@ handleMessage(){
     echo ":$comando:"
     case "$comando" in
         /newchurras\ *)   isAdmin && newchurras ${comando//\/newchurras /};;
+        /delchurras\ *)   isAdmin && delchurras ${comando//\/delchurras /};;
         /newplace\ *)     isAdmin && newplace ${comando//\/newplace /};;
         /fake\ *)         isAdmin && fake ${comando//\/fake /};;
         /qualchurras)     qualchurras;;

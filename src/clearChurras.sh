@@ -9,7 +9,7 @@ clearChurras(){
             [ -e $filename -a ! -s $filename ] && rm $filename && echo "$filename vazio. Apagado";
         }
         echo "Churras $p em $d $t ja passou"
-        sed -i "/$pin$/d" CHURRAS
+        sed -i "/|$pin$/d" CHURRAS
         curl -s "$apiurl/unpinChatMessage?chat_id=$CHATID&message_id=$pin"
     done < CHURRAS
 }
