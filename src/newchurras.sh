@@ -39,7 +39,8 @@ newchurras(){
     clearChurras
 
     # Caso nenhum erro seja encontrado, cadastra o churras
-    timeLimit $data ${hora//h/:} && { 
+
+    timeLimit $data ${hora//h/:} && checkOverlap $data ${hora//h:} && {
         envia "Churras marcado no dia $data, às ${hora//h/:} na $lugar. Checkin válido de 1h antes até 2h depois do horário."
         echo "$lugar|$data|${hora//h/:}|$id_msg" >> CHURRAS
     } || {
