@@ -1,4 +1,5 @@
 checkOverlap(){
+    [ ! -f CHURRAS ] && return
     local data=$1 hora=$2 p d t pin start1 end1 start2 end2
     data="${data:3:2}/${data:0:2}/${data:6:4}"
     start1="$(date -d "$data $hora -03 -1 hour" +%s)"
