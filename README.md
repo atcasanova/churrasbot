@@ -28,6 +28,10 @@ Um admin pode criar novos churrascos com o seguinte comando:
 
 Esse comando estabelece o dia e a hora do churrasco. O checkin será válido de 1 hora antes até 2 horas depois do horário definido. Também vai colocar a mensagem confirmando o agendamento como "pinada" no grupo, além de enviar um arquivo .ics para que seja possível salvar nas agendas.
 
+Para deletar um churrasco, um admin pode utilizar o comando:
+
+```/delchurras dd/mm/aaaa HH:MM VENUE```
+
 ## Check-in
 
 O checkin só é válido por meio de envio de mensagem **live location** pelo Telegram. **A localização normal é ignorada**, pois pode ser spoofada pelo próprio Telegram. 
@@ -40,18 +44,20 @@ Um admin pode cancelar checkins de malandros usando fake GPS:
 
 ```/fake nome_do_usuario```
 
-Esse comando retira o checkin de quem tentou roubar e retira um ponto do malandro no ranking.
+Esse comando retira o checkin de quem tentou roubar e retira um ponto do malandro no ranking (além de perder o ponto roubado, perde mais um)
 
 ## Demais comandos
-| comando      | função                                                               |
-|--------------|----------------------------------------------------------------------|
-| /ranking     | mostra o ranking de presenças                                        |
-| /qualchurras | mostra o último churras marcado, respondendo a mensagem que o marcou |
-| /help        | mostra instruções para o checkin                                     |
+| comando      | função                                                                |
+|--------------|-----------------------------------------------------------------------|
+| /ranking     | mostra o ranking de presenças                                         |
+| /qualchurras | mostra o próximo churras marcado, respondendo a mensagem que o marcou |
+| /help        | mostra instruções para o checkin                                      |
 
 # TODO
-- [x] Implementar horário mínimo para checkin 
+- [x] Implementar horário mínimo para checkin
 - [x] Converter cálculo de distância de C para bc
+- [x] Implementar prazo mínimo para marcação de churras
+- [x] Implementar verificação de conflito de horários de churras
 
 # KNOWN BUGS
 * ~~em algumas situações, após o envio de um checkin, o bot se perde no offset e não processa algumas mensagens.~~ ✅
