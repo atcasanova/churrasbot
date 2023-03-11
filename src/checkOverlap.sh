@@ -11,7 +11,7 @@ checkOverlap(){
         if [[ "$end1" < "$start2" ]] || [[ "$start1" > "$end2" ]]; then
             continue
         else
-            echo "$pin" "Já tem esse churras nesse horário"
+            envia "$pin" "Já tem esse churras nesse horário"
             return 2
         fi
     done < CHURRAS

@@ -44,7 +44,6 @@ newchurras(){
         envia "Churras marcado no dia $data, às ${hora//h/:} na $lugar. Checkin válido de 1h antes até 2h depois do horário."
         echo "$lugar|$data|${hora//h/:}|$id_msg" >> CHURRAS
     } || {
-        envia "Churras deve ser marcado com no mínimo 18h de antecedência"
         return 3
     }
     

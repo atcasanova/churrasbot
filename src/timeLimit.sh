@@ -5,6 +5,9 @@ timeLimit(){
     now=$(date +%s)
     churras_timestamp=$(( $(date -d "${d:3:2}/${d:0:2}/${d:6:4} $t" +%s) )) 
     diff=$(( $churras_timestamp - $now ))
-    (( diff > horas_limite )) || return 1
+    (( diff > horas_limite )) || {
+        envia "Churras deve ser marcado com no mínimo 18h de antecedência"
+        return 1
+    }
     return
 }
