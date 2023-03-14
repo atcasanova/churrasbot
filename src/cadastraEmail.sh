@@ -11,7 +11,7 @@ cadastraEmail(){
         return
     }
     grep -q "^$username:" EMAILS && {
-        sed -i "s/^$username:/$username:$email/g" EMAILS
+        sed -i "s/^$username:.*/$username:$email/g" EMAILS
         envia "Email de $username atualizado para $email"
     } || {
         echo "$username:$email" >> EMAILS
