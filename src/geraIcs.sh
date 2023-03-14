@@ -15,7 +15,7 @@ geraIcs(){
     -F "caption=Agendamento do Churras, salve na agenda"
 
     [ -s EMAILS ] && {
-        local emails=$(cut -f2 EMAILS | tr '\n' ',')
+        local emails=$(cut -f2 -d: EMAILS | tr '\n' ',')
         emails=${emails::-1}
         echo $emails
         echo "Checkin de ${inicial:0:2}:${inicial:2:2} até ${final:0:2}:${final:2:2}" | mailx -a "FROM:ChurrasBot <no-reply@bru.to>" -s "$nome" -A $filename $emails
