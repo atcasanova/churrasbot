@@ -1,5 +1,9 @@
 **Check-in**
 
+Quem quiser ser notificado por e-mail dos churrascos deve utilizar o comando 
+
+```/email seu@email```
+
 O checkin só é válido por meio de envio de mensagem **live location** pelo Telegram. **A localização normal é ignorada**, pois pode ser spoofada pelo próprio Telegram. 
 
 Caso a localização seja enviada dentro do prazo (1h antes até 2h depois do horário marcado) e dentro da distância configurada (hoje em 150m do ponto cadastrado no arquivo `localizacoes`), o checkin será contabilizado.

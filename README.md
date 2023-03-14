@@ -32,6 +32,10 @@ Para deletar um churrasco, um admin pode utilizar o comando:
 
 ```/delchurras dd/mm/aaaa HH:MM VENUE```
 
+Usuários que desejarem ser notificados por e-mail sobre novos churrascos, devem cadastrar o email por meio do comando: 
+
+```/email endereco@email.com```
+
 ## Check-in
 
 O checkin só é válido por meio de envio de mensagem **live location** pelo Telegram. **A localização normal é ignorada**, pois pode ser spoofada pelo próprio Telegram. 
@@ -51,6 +55,7 @@ Esse comando retira o checkin de quem tentou roubar e retira um ponto do malandr
 |--------------|-----------------------------------------------------------------------|
 | /ranking     | mostra o ranking de presenças                                         |
 | /qualchurras | mostra o próximo churras marcado, respondendo a mensagem que o marcou |
+| /email       | cadastra email do usuário para receber notificações de churras        |
 | /help        | mostra instruções para o checkin                                      |
 
 # TODO
@@ -58,6 +63,7 @@ Esse comando retira o checkin de quem tentou roubar e retira um ponto do malandr
 - [x] Converter cálculo de distância de C para bc
 - [x] Implementar prazo mínimo para marcação de churras
 - [x] Implementar verificação de conflito de horários de churras
+- [x] Notificação de churras por e-mail
 
 # KNOWN BUGS
 * ~~em algumas situações, após o envio de um checkin, o bot se perde no offset e não processa algumas mensagens.~~ ✅
