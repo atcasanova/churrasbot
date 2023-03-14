@@ -18,6 +18,10 @@ ranking(){
         envia "$ranking" 
       
         isAdmin $username && {
+            # imagem considera apenas usuários com as 3 maiores pontuações
+            local points="$(cut -f1 -d" " <<< "$ranking" | sort -nur| head -3|tr '\n' '|')"
+            ranking=$(grep -E "^(${points::-1}) " <<< "$ranking")
+
             # geração string para gerar gráfico na API do quickchart
             local users pontos score name payload
             while read score name ; do
@@ -34,7 +38,7 @@ ranking(){
 
             ## verifica se esse gráfico já foi pedido antes
             ## caso já tenha, envia o mesmo. Caso contrário, gera um novo
-            if [ ! -f payload_ranking -o "$payload" != "$(cat payload_ranking)" ]; then
+            if [ ! -f payload_ranking ] || [ "$payload" != "$(cat payload_ranking)" ]; then
                 echo "$payload" > payload_ranking
                 curl -s "https://quickchart.io/chart?bkg=black&c=$payload" -o chart.png
             fi
