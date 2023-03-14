@@ -7,6 +7,7 @@ handleMessage(){
         /delchurras\ *)   isAdmin && delchurras ${comando//\/delchurras /};;
         /newplace\ *)     isAdmin && newplace ${comando//\/newplace /};;
         /fake\ *)         isAdmin && fake ${comando//\/fake /};;
+        /email\ *)        cadastraEmail ${comando//\/email /};;
         /qualchurras)     qualchurras;;
         /ranking)         ranking;;
         /help)            ajuda;;
