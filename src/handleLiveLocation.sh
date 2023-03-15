@@ -1,4 +1,5 @@
 handleLiveLocation(){
+    (( $# != 3 )) && { envia "Falha no processamento da Live Location"; return 1; }
     local username="$1" latitude="$2" longitude="$3" lat long nome alvo
     offset
     # pegar data, hora e localização do churras atual
