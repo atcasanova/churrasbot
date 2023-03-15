@@ -13,13 +13,13 @@ main(){
         # se a mensagem enviada for uma live location, o campo 'live_period' do JSON vem prenchido
         # então se ele não for nulo, tratamos a mensagem
         if [ "$live_period" != "null" ]; then
-            handleLiveLocation
+            handleLiveLocation "$username" "$latitude" "$longitude"
         # se for uma mensagem de localização normal (live_location vazio, mas longitude preenchida)
         # apaga a mensagem e compensa o offset
         elif [ "$longitude" != "null" ]; then
-            handleLocation
+            handleLocation "$username"
         else
-            handleMessage
+            handleMessage "$text"
         fi
     done
 }

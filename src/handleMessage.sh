@@ -1,13 +1,13 @@
 handleMessage(){
+    local comando="$(echo ${1//_/ }| sed -e 's/ \+$//g' | sed "s/$BOTNAME//g")"
     offset
-    comando="$(echo ${text//_/ }| sed -e 's/ \+$//g' | sed "s/$BOTNAME//g")"
     echo ":$comando:"
     case "$comando" in
         /newchurras\ *)   isAdmin && newchurras ${comando//\/newchurras /};;
         /delchurras\ *)   isAdmin && delchurras ${comando//\/delchurras /};;
         /newplace\ *)     isAdmin && newplace ${comando//\/newplace /};;
         /fake\ *)         isAdmin && fake ${comando//\/fake /};;
-        /email\ *)        cadastraEmail ${comando//\/email /};;
+        /email\ *)        mailEnabled && cadastraEmail ${comando//\/email /};;
         /qualchurras)     qualchurras;;
         /ranking)         ranking;;
         /help)            ajuda;;
