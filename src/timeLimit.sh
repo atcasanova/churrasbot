@@ -13,7 +13,5 @@ timeLimit(){
         envia "Churras deve ser marcado com no mínimo 18h de antecedência"
         return 1
     }
-
-    # Caso contrário, retorna sucesso
-    return
+    # se passar do bloco acima encerra OK
 }
