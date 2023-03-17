@@ -7,7 +7,6 @@ TOKEN=""
 apiurl="https://api.telegram.org/bot\$TOKEN"
 CHATID=""
 ADMINS=("")
-BOTNAME=""
 DISTANCIA=150
 EMAIL=no
 ANTES=1
@@ -35,7 +34,9 @@ EOF
         [[ ! "$(declare -p ADMINS)" =~ "declare -a" ]] && error "Variável ADMINS deve ser um array."
         (( ${#ADMINS[@]} < 1 )) && error "Array ADMINS sem elementos"
         (( ${#ADMINS[0]} < 1 )) && error "Array ADMINS deve ter ao menos um elemento"
-        [ "${BOTNAME:0:1}" != "@" ] && error "Variável BOTNAME deve começar com @"
+        
+        # Preenche BOTNAME
+        [ -z $BOTNAME ] && BOTNAME="@$(curl -s $apiurl/getMe | jq -r '.result.username')"
     fi
     curl -s $apiurl/getMe >/dev/null
 }
