@@ -15,10 +15,11 @@ apiurl="https://api.telegram.org/bot$TOKEN"
 CHATID="CHAT_ID do grupo"
 ADMINS=( "username_admin1" "username_admin_n" )
 BOTNAME="@nomeDoBot"
-DISTANCIA=150 # Distância válida para check-in (metros)
-EMAIL=no
-ANTES=1     # Horas antes do evento para início do check-in
-DEPOIS=2    # Horas após o evento para fim do check-in
+DISTANCIA=150       # Distância válida para check-in (metros)
+EMAIL=no            # Mude para yes para usar emails
+ANTES=1             # Horas antes do evento para início do check-in
+DEPOIS=2            # Horas após o evento para fim do check-in
+ANTECEDENCIA=18     # Perído mínimo de antecedência em horas para um churrasco ser marcado
 ```
 
 ## Funcionalidades

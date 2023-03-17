@@ -1,7 +1,7 @@
-handleMessage(){
-    local comando="$(echo ${1//_/ }| sed -e 's/ \+$//g' | sed "s/$BOTNAME//g")"
-    offset
-    echo ":$comando:"
+# Função para processar e executar comandos do bot
+handleCommand(){
+    local comando="$1"
+
     case "$comando" in
         /newchurras\ *)   isAdmin && newchurras ${comando//\/newchurras /};;
         /delchurras\ *)   isAdmin && delchurras ${comando//\/delchurras /};;
@@ -12,4 +12,15 @@ handleMessage(){
         /ranking)         ranking;;
         /help)            ajuda;;
     esac
+}
+
+# Função principal para lidar com mensagens
+handleMessage(){
+    local comando="$(echo ${1//_/ }| sed -e 's/ \+$//g' | sed "s/$BOTNAME//g")"
+    
+    # Atualiza o offset
+    offset
+
+    # Processa e executa o comando
+    handleCommand "$comando"
 }

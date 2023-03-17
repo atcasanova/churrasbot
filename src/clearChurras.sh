@@ -1,4 +1,4 @@
-clearChurras() {
+clearChurras(){
     local place date time pin now churras_timestamp filename
     now=$(date +%s)
 
