@@ -8,7 +8,7 @@ sendLocation(){
         -F "latitude=$lat" \
         -F "longitude=$long" \
         -F "title=${venue}" \
-        -F "address=$address"
+        -F "address=$address" | jq '.ok'
         echo
     }
 }

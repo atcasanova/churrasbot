@@ -54,6 +54,7 @@ newchurras(){
     geraIcs "$lugar" "${data:6:4}${data:3:2}${data:0:2}" "${hora//h/:}"
     sendLocation "$lugar"
     notificaUsers
+    lembrete "$id_msg" "$data" "$hora"
 
     # cria o arquivo de presença pro churrasco
     touch C_${lugar// /_}_${data//\//}

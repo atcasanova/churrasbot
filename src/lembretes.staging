@@ -1,9 +1,0 @@
-lembretes(){
-    local id="$1" data="$2" hora="$3"
-    data="${data:6:4}-${data:3:2}-${data:0:2}"
-    later=$(date -d "$data $hora -03 +1 minute" +%H:%M)
-    sed "s/ID_PLACEHOLDER/$id/" template_reminder.sh > reminders/$id.sh
-    (cat template_run.sh; echo -e "bash ./$id.sh\nrm $id.sh run_$id.sh") > reminders/run_$id.sh
-    chmod +x reminders/run_$id.sh reminders/$id.sh
-    at $hora $data -f $(dirname $0)/reminders/run_$id.sh
-}

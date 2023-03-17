@@ -6,7 +6,9 @@ check_env(){
         source env.sh
         which curl >/dev/null || error "curl não instalado"
         which bc >/dev/null || error "bc não instalado"
+        which at >/dev/null || error "at não instalado"
         mailEnabled && { which mailx >/dev/null || error "mailx não instalado"; }
+        [ ! -d reminders ] && mkdir reminders
         [[ ! "$TOKEN" =~ [0-9]{9}:[a-zA-Z0-9_-]{35} ]] && error "Variável TOKEN inválida"
         [ -z "$CHATID" ] && error "Variável CHATID vazia"
         [[ ! "$(declare -p ADMINS)" =~ "declare -a" ]] && error "Variável ADMINS deve ser um array."
