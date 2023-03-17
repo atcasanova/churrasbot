@@ -19,7 +19,7 @@ EOF
             command -v "$cmd" >/dev/null || error "$cmd não instalado"
         done
 
-        mailEnabled && command -v mailx >/dev/null || error "mailx não instalado"
+        mailEnabled && { command -v mailx >/dev/null || error "mailx não instalado"; }
 
         [ ! -d reminders ] && mkdir reminders
 
