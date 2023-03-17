@@ -1,14 +1,28 @@
-check_env(){
+check_env() {
     if [ ! -f env.sh ]; then
-        echo -e 'TOKEN=""\napiurl="https://api.telegram.org/bot$TOKEN"\nCHATID=""\nADMINS=("")\nBOTNAME=""\nDISTANCIA=150' > env.sh
+        cat <<- EOF > env.sh
+TOKEN=""
+apiurl="https://api.telegram.org/bot\$TOKEN"
+CHATID=""
+ADMINS=("")
+BOTNAME=""
+DISTANCIA=150
+EMAIL=no
+ANTES=1
+DEPOIS=2
+EOF
         error "Arquivo env.sh não existe. Criei um modelo. Edite-o"
     else
         source env.sh
-        which curl >/dev/null || error "curl não instalado"
-        which bc >/dev/null || error "bc não instalado"
-        which at >/dev/null || error "at não instalado"
-        mailEnabled && { which mailx >/dev/null || error "mailx não instalado"; }
+
+        for cmd in curl bc at; do
+            command -v "$cmd" >/dev/null || error "$cmd não instalado"
+        done
+
+        mailEnabled && command -v mailx >/dev/null || error "mailx não instalado"
+
         [ ! -d reminders ] && mkdir reminders
+
         [[ ! "$TOKEN" =~ [0-9]{9}:[a-zA-Z0-9_-]{35} ]] && error "Variável TOKEN inválida"
         [ -z "$CHATID" ] && error "Variável CHATID vazia"
         [[ ! "$(declare -p ADMINS)" =~ "declare -a" ]] && error "Variável ADMINS deve ser um array."
@@ -16,5 +30,6 @@ check_env(){
         (( ${#ADMINS[0]} < 1 )) && error "Array ADMINS deve ter ao menos um elemento"
         [ "${BOTNAME:0:1}" != "@" ] && error "Variável BOTNAME deve começar com @"
     fi
+
     curl -s $apiurl/getMe >/dev/null
 }

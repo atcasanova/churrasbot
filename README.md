@@ -1,71 +1,87 @@
 # CHURRASBOT
 
-Esse é o CHURRASBOT, criado para validar a presença dos competidores nos churrascos da temporada. Acabou a conversa fiada, agora saberemos quem são os campeões
+O CHURRASBOT é um bot do Telegram criado para gerenciar a presença dos participantes nos churrascos da temporada. Desenvolvido em Shell Script (Bash), o bot utiliza a API do Telegram para realizar todas as ações. Acabou a conversa fiada, agora saberemos quem são os campeões!
 
-## Setup
-* Os binários `bc` e `curl` devem estar disponíveis no `PATH`
+## Pré-Requisitos
+- O projeto depende dos binários `curl`, `bc` e `at`. Certifique-se de que essas dependências estejam disponíveis no `PATH` do sistema.
+- Caso queira enviar notificações por email, o `mailx` também será necessário, bem como um `SMTP` configurado.
+
+## Configuração
 
 * Deve ser criado um arquivo chamado `env.sh` com o seguinte conteúdo:
 ```bash
 TOKEN="token_do_seu_bot"
 apiurl="https://api.telegram.org/bot$TOKEN"
-CHATID="CHAT_ID do seu grupo"
-ADMINS=( "username_do_admin1" "username_do_admin_n" )
+CHATID="CHAT_ID do grupo"
+ADMINS=( "username_admin1" "username_admin_n" )
 BOTNAME="@nomeDoBot"
-DISTANCIA=150 # distância em metros do ponto cadastrado para o checkin ser aceito
+DISTANCIA=150 # Distância válida para check-in (metros)
+EMAIL=no
+ANTES=1     # Horas antes do evento para início do check-in
+DEPOIS=2    # Horas após o evento para fim do check-in
 ```
 
-## Funcionamento
-Um admin deve cadastrar previamente o local onde o churrasco será realizado, com o seguinte comando:
+## Funcionalidades
+### Configuração do local do churrasco
+Um administrador deve cadastrar previamente o local onde o churrasco será realizado, utilizando o comando:
 
 ```/newplace VENUE lat long endereço do local no google maps```
 
-onde `VENUE` é o nome do local a ser utilizado no bot futuramente (sem espaços, por favor) e `lat` e `long` são a latitude e longitude base do lugar.
+Onde:
 
-Um admin pode criar novos churrascos com o seguinte comando:
+- `VENUE` é o nome do local a ser utilizado no bot futuramente (sem espaços, por favor)
+- `lat` e `long` são a latitude e longitude base do local
+
+### Gerenciamento de churrascos
+#### Criação de churrascos
+
+Um administrador pode criar novos churrascos com o seguinte comando:
 
 ```/newchurras dd/mm/aaaa HH:MM VENUE```
 
-Esse comando estabelece o dia e a hora do churrasco. O checkin será válido de 1 hora antes até 2 horas depois do horário definido. Também vai colocar a mensagem confirmando o agendamento como "pinada" no grupo, além de enviar um arquivo .ics para que seja possível salvar nas agendas.
+Esse comando estabelece o dia e a hora do churrasco. O check-in será válido de 1 hora antes até 2 horas depois do horário definido. A mensagem confirmando o agendamento será "pinada" no grupo e um arquivo .ics será enviado para que os usuários possam salvar o evento nas agendas.
 
-Para deletar um churrasco, um admin pode utilizar o comando:
+#### Deletar churrascos
+Para deletar um churrasco, um administrador pode utilizar o comando:
 
 ```/delchurras dd/mm/aaaa HH:MM VENUE```
 
-Usuários que desejarem ser notificados por e-mail sobre novos churrascos, devem cadastrar o email por meio do comando: 
+#### Notificações por e-mail
+Usuários que desejarem ser notificados por e-mail sobre novos churrascos devem cadastrar o e-mail com o comando:
 
 ```/email endereco@email.com```
 
-## Check-in
+### Check-in
 
-O checkin só é válido por meio de envio de mensagem **live location** pelo Telegram. **A localização normal é ignorada**, pois pode ser spoofada pelo próprio Telegram. 
+A validação do check-in ocorre exclusivamente através do envio de uma mensagem de **localização em tempo real** pelo Telegram. A localização comum é desconsiderada, pois o próprio Telegram permite a falsificação dessas informações.
 
-Caso a localização seja enviada dentro do prazo (1h antes até 2h depois do horário marcado) e dentro da distância configurada (hoje em 150m do ponto cadastrado no arquivo `localizacoes`), o checkin será contabilizado.
+Para contabilizar o check-in, a localização deve ser enviada dentro do intervalo estabelecido (1 hora antes até 2 horas após o horário marcado) e respeitar a distância configurada (atualmente, 150 metros do ponto registrado no arquivo `localizacoes`).
 
-Sempre que uma mensagem com localização for processada pelo bot, ela será deletada do grupo para evitar poluição (às vezes dá pau, mas paciência)
+Mensagens com localização processadas pelo bot são automaticamente removidas do grupo a fim de evitar poluição visual (eventuais falhas nesse processo são possíveis).
 
-Um admin pode cancelar checkins de malandros usando fake GPS:
+Administradores podem cancelar check-ins fraudulentos, realizados com GPS falso:
 
 ```/fake nome_do_usuario```
 
-Esse comando retira o checkin de quem tentou roubar e retira um ponto do malandro no ranking (além de perder o ponto roubado, perde mais um)
+Esse comando anula o check-in e subtrai um ponto adicional do usuário no ranking, além do ponto associado ao check-in fraudulento.
 
-## Demais comandos
-| comando      | função                                                                |
-|--------------|-----------------------------------------------------------------------|
-| /ranking     | mostra o ranking de presenças                                         |
-| /qualchurras | mostra o próximo churras marcado, respondendo a mensagem que o marcou |
-| /email       | cadastra email do usuário para receber notificações de churras        |
-| /help        | mostra instruções para o checkin                                      |
+### Comandos adicionais
+| Comando       | Função                                                              |
+|---------------|---------------------------------------------------------------------|
+| /ranking      | Exibe o ranking de presenças                                       |
+| /qualchurras  | Mostra o próximo churrasco agendado, em resposta à mensagem marcada|
+| /email        | Registra o e-mail do usuário para receber notificações de churrascos|
+| /help         | Exibe instruções para realizar o check-in                          |
 
 # TODO
-- [x] Implementar horário mínimo para checkin
+- [x] Implementar horário mínimo para check-in
 - [x] Converter cálculo de distância de C para bc
-- [x] Implementar prazo mínimo para marcação de churras
-- [x] Implementar verificação de conflito de horários de churras
-- [x] Notificação de churras por e-mail
-- [x] Lembrete de Início de hora de checkin no telegram
-- [ ] Lembrete de Fim de hora de checkin no telegram
+- [x] Estabelecer prazo mínimo para agendar churrascos
+- [x] Verificar conflito de horários na marcação de churrascos
+- [x] Enviar notificações de churrascos por e-mail
+- [x] Enviar lembrete de início do check-in no Telegram
+- [ ] Enviar lembrete de término do check-in no Telegram
 
-# KNOWN BUGS
-* ~~em algumas situações, após o envio de um checkin, o bot se perde no offset e não processa algumas mensagens.~~ ✅
+# Problemas conhecidos
+* ~~Em algumas situações, após o envio de um check-in, o bot pode falhar no processamento do offset e não processar algumas mensagens.~~ ✅
+

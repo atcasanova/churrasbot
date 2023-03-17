@@ -1,14 +1,20 @@
-lembrete(){
-    SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
-    echo $SCRIPT_DIR
+lembrete() {
     local id="$1" data="$2" hora="$3"
     data="${data:6:4}-${data:3:2}-${data:0:2}"
     antes=$(date -d "$data $hora -03 -$ANTES hour" +%H:%M)
-#    depois=$(date -d "$data $hora -03 +$DEPOIS hours" +%H:%M)
-    sed "s|ID_PLACEHOLDER|$id|;s|DIR_PLACEHOLDER|$SCRIPT_DIR|" "${SCRIPT_DIR}/template_reminder.sh" > "${SCRIPT_DIR}/reminders/$id.sh"
-    (sed "s|DIR_PLACEHOLDER|${SCRIPT_DIR}/reminders|" "${SCRIPT_DIR}/template_run.sh"; echo -e "bash ./$id.sh\nrm $id.sh run_$id.sh") > "${SCRIPT_DIR}/reminders/run_$id.sh"
-    chmod +x "${SCRIPT_DIR}/reminders/run_$id.sh" "${SCRIPT_DIR}/reminders/$id.sh"
-    echo $hora $data -f "${SCRIPT_DIR}/reminders/run_$id.sh"
-    at $antes $data -f "${SCRIPT_DIR}/reminders/run_$id.sh"
-    #at $depois $data -f "${SCRIPT_DIR}/reminders/run_$id.sh"
+
+    SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+    REMINDER_DIR="${SCRIPT_DIR}/reminders"
+
+    TEMPLATE_REMINDER="${SCRIPT_DIR}/template_reminder.sh"
+    TEMPLATE_RUN="${SCRIPT_DIR}/template_run.sh"
+
+    REMINDER_SCRIPT="${REMINDER_DIR}/${id}.sh"
+    RUN_SCRIPT="${REMINDER_DIR}/run_${id}.sh"
+
+    sed "s|ID_PLACEHOLDER|$id|;s|DIR_PLACEHOLDER|$SCRIPT_DIR|" "${TEMPLATE_REMINDER}" > "${REMINDER_SCRIPT}"
+    (sed "s|DIR_PLACEHOLDER|${REMINDER_DIR}|" "${TEMPLATE_RUN}"; echo -e "\nbash ./$id.sh\nrm $id.sh run_$id.sh") > "${RUN_SCRIPT}"
+
+    chmod +x "${REMINDER_SCRIPT}" "${RUN_SCRIPT}"
+    at $antes $data -f "${RUN_SCRIPT}"
 }

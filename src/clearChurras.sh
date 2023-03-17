@@ -1,16 +1,24 @@
-clearChurras(){
-    local p d t pin now churras_timestamp filename
+clearChurras() {
+    local place date time pin now churras_timestamp filename
     now=$(date +%s)
+
     [ ! -f CHURRAS ] && return
-    while IFS='|' read p d t pin; do
-        churras_timestamp=$(( $(date -d "${d:3:2}/${d:0:2}/${d:6:4} $t" +%s) + 7200 ))
-        (( churras_timestamp < now )) || continue
-        [ ! -z "$p" ] && {
-            filename="C_${p// /_}_${d//\//}"
-            [ -e $filename -a ! -s $filename ] && rm $filename && echo "$filename vazio. Apagado";
-        }
-        echo "Churras $p em $d $t ja passou"
-        sed -i "/|$pin$/d" CHURRAS
-        curl -s "$apiurl/unpinChatMessage?chat_id=$CHATID&message_id=$pin"
+
+    while IFS='|' read -r place date time pin; do
+        churras_timestamp=$(( $(date -d "${date:3:2}/${date:0:2}/${date:6:4} $time" +%s) + ( DEPOIS * 3600 ) ))
+
+        if (( churras_timestamp < now )); then
+            if [ ! -z "$place" ]; then
+                filename="C_${place// /_}_${date//\//}"
+                if [ -e "$filename" ] && [ ! -s "$filename" ]; then
+                    rm "$filename"
+                    echo "$filename vazio. Apagado"
+                fi
+            fi
+
+            echo "Churras $place em $date $time já passou"
+            sed -i "/|$pin$/d" CHURRAS
+            curl -s "$apiurl/unpinChatMessage?chat_id=$CHATID&message_id=$pin"
+        fi
     done < CHURRAS
 }
