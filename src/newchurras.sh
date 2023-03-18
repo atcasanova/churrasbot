@@ -26,17 +26,18 @@ newchurras(){
     clearChurras
     timeLimit $data ${hora//h/:} && checkOverlap $data ${hora//h/:} && {
         envia "Churras marcado no dia $data, às ${hora//h/:} na $lugar. Checkin válido de 1h antes até 2h depois do horário."
-        echo "$lugar|$data|${hora//h/:}|$id_msg" >> CHURRAS
+        local pin="$id_msg"
+        echo "$lugar|$data|${hora//h/:}|$pin" >> CHURRAS
     } || {
         return 3
     }
 
     # Fixa a mensagem do churrasco no chat e envia o arquivo .ics
-    curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$id_msg&disable_notification=false"
+    curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$pin&disable_notification=false"
     geraIcs "$lugar" "${data:6:4}${data:3:2}${data:0:2}" "${hora//h/:}"
     sendLocation "$lugar"
     notificaUsers
-    lembrete "$id_msg" "$data" "$hora"
+    lembrete "$pin" "$data" "$hora"
 
     # Cria o arquivo de presença para o churrasco
     touch C_${lugar// /_}_${data//\//}
