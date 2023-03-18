@@ -12,4 +12,5 @@ offset=$(cat offset)
 while true; do
     load_functions
     main
+    sleep 1
 done
