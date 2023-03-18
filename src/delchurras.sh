@@ -12,7 +12,7 @@ delchurras(){
 
     churrasco=$(achaChurras "$argValido")
     echo "deletaChurras \"$churrasco\""
-    deletaChurras "$churasco"
+    deletaChurras "$churrasco"
 }
 
 deletaChurras(){
