@@ -47,7 +47,7 @@ ranking(){
             curl -s -X POST "$apiurl/sendPhoto"  \
             -F "chat_id=$CHATID" \
             -F "photo=@chart.png" \
-            -F "caption=Ranking"
+            -F "caption=Ranking" | jq '.ok'
             echo
         }
     }
