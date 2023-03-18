@@ -2,6 +2,7 @@ main(){
     response=$(curl -s -X POST --data "offset=$offset&limit=1" "$apiurl/getUpdates" | \
         jq '.result[] | "\(.update_id)|\(.message.message_id)|\(.message.chat.id)|\(.message.from.username)|\(.message.from.id)|\(.message.date)|\(.message.location.latitude)|\(.message.location.longitude)|\(.message.location.live_period)|\(.message.text)"' -r)
 
+    [ -z "$response" ] && { sleep 1; return; }
     IFS='|' read offset messageId chatid username userid data latitude longitude live_period text <<< "$response"
     echo "$offset|$messageId|$chatid|$userid|$username|$data|$latitude|$live_period|$text"
     captureUser "$username"
