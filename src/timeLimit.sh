@@ -1,7 +1,7 @@
 # Função para verificar se um churrasco foi marcado com pelo menos 18 horas de antecedência
 timeLimit(){
     local d="$1" t="$2" horas_limite now churras_timestamp diff
-    horas_limite=$(( ${ANTECEDENCIA:-18} * 60 * 60 )) # Converte horas em segundos
+    horas_limite=$(( ${ANTECEDENCIA:-18} * 3600 )) # Converte horas em segundos
 
     now=$(date +%s) # Obtém o timestamp atual
     churras_timestamp=$(( $(date -d "${d:3:2}/${d:0:2}/${d:6:4} $t" +%s) )) # Obtém o timestamp do churrasco

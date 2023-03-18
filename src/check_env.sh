@@ -3,16 +3,16 @@ check_env(){
     # Verifica se o arquivo env.sh existe, caso contrário, cria um modelo e exibe um erro
     if [ ! -f env.sh ]; then
         cat > env.sh <<- EOF
-TOKEN=""
-apiurl="https://api.telegram.org/bot\$TOKEN"
-CHATID=""
-ADMINS=("")
-DISTANCIA=150
-EMAIL=no
-ANTES=1
-DEPOIS=2
-ANTECEDENCIA=18
-EOF
+	TOKEN=""
+	apiurl="https://api.telegram.org/bot\$TOKEN"
+	CHATID=""
+	ADMINS=("")
+	DISTANCIA=150
+	EMAIL=no
+	ANTES=1
+	DEPOIS=2
+	ANTECEDENCIA=18
+	EOF
         error "Arquivo env.sh não existe. Criei um modelo. Edite-o"
     else
         source env.sh

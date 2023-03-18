@@ -8,7 +8,7 @@ qualchurras(){
     now=$(date +%s)
     while IFS='|' read p d t pin; do
         # fazer conta pra saber se tá rolando agora
-        churras_timestamp=$(( $(date -d "${d:3:2}/${d:0:2}/${d:6:4} $t" +%s) + 7200 ))
+        churras_timestamp=$(( $(date -d "${d:3:2}/${d:0:2}/${d:6:4} $t" +%s) + (DEPOIS*3600) ))
         (( churras_timestamp > now )) || continue
         ordem+="$churras_timestamp|$p|$d|$t|$pin\n"
     done < CHURRAS

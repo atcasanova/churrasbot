@@ -18,7 +18,7 @@ handleLocation() {
     # Apaga a mensagem de localização
     deleteLocationMessage "$messageId"
 
-    # Se um churrasco estiver ativo, envia um lembrete para usar Live Location
+    # Se um churrasco estiver ativo, envia um aviso para usar Live Location
     if churrasAtivo; then
         sendCheckinReminder "$username"
     fi
