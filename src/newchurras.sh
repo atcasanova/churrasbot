@@ -1,24 +1,12 @@
 newchurras(){
     (( $# != 3 )) && return 2
-    # Extrai data, hora e lugar das entradas, usando regex
-    local data=$(grep -Eo "\b(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/(19|20)[0-9]{2}\b" <<< "$*")
-    local hora=$(grep -Eo "\b(0[0-9]|1[0-9]|2[0-3])(:|h)[0-5][0-9]\b" <<< "$*")
-    local place=$(grep -Eo "\b[A-Z]+\b" <<< "${*^^}")
-    local lugar latitude longitude
 
+    local argValido lugar latitude longitude
+    argValido=$(validaArgumentos "$*")
+
+    IFS='|' read -r data hora place <<< "$argValido"
     # Verifica se as variáveis foram preenchidas corretamente, senão retorna erro
-    [ -z "$data" ] && { 
-        echo "data invalida";
-        return 1;
-    }
-    [ -z "$hora" ] && {
-        echo "hora invalida";
-        return 2;
-    }
-    [ -z "$place" ] && {
-        echo "local invalido";
-        return 3;
-    }
+    checkVars "$data" "$hora" "$place" || return 3
     
     [ ! -f localizacoes ] && {
         envia "Nenhuma localização disponível. Cadastre antes com /newplace"

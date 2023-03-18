@@ -18,7 +18,7 @@ DISTANCIA=150       # Distância válida para check-in (metros)
 EMAIL=no            # Mude para yes para usar emails
 ANTES=1             # Horas antes do evento para início do check-in
 DEPOIS=2            # Horas após o evento para fim do check-in
-ANTECEDENCIA=18     # Perído mínimo de antecedência em horas para um churrasco ser marcado
+ANTECEDENCIA=18     # Período mínimo de antecedência em horas para um churrasco ser marcado
 ```
 
 ## Funcionalidades
@@ -34,12 +34,15 @@ Onde:
 
 ### Gerenciamento de churrascos
 #### Criação de churrascos
+Um administrador pode criar novos churrascos usando o seguinte comando:
 
-Um administrador pode criar novos churrascos com o seguinte comando:
+`/newchurras dd/mm/aaaa HH:MM VENUE`
 
-```/newchurras dd/mm/aaaa HH:MM VENUE```
+Esse comando define o dia e a hora do churrasco. O check-in será válido no intervalo de tempo definido pelas variáveis `ANTES` e `DEPOIS` localizadas no arquivo `env.sh`, tendo a hora marcada como base. Por padrão, `ANTES=1` e `DEPOIS=2`. Assim, um churrasco marcado para as 13h00 terá seu checkin válido de 12h00 até 15h00. 
 
-Esse comando estabelece o dia e a hora do churrasco. O check-in será válido de 1 hora antes até 2 horas depois do horário definido. A mensagem confirmando o agendamento será "pinada" no grupo e um arquivo .ics será enviado para que os usuários possam salvar o evento nas agendas.
+Um churrasco não pode ser marcado com uma antecedência menor do que a definida na variável `ANTECEDENCIA`, nem pode ser marcado ao mesmo tempo que outro churrasco. 
+
+A mensagem confirmando o agendamento será "pinada" no grupo e um arquivo .ics será enviado para que os usuários possam salvar o evento nas agendas.
 
 #### Deletar churrascos
 Para deletar um churrasco, um administrador pode utilizar o comando:
@@ -81,6 +84,7 @@ Esse comando anula o check-in e subtrai um ponto adicional do usuário no rankin
 - [x] Enviar notificações de churrascos por e-mail
 - [x] Enviar lembrete de início do check-in no Telegram
 - [ ] Enviar lembrete de término do check-in no Telegram
+- [ ] Mudar a lista de usuários para IDs ao invés de usernames
 
 # Problemas conhecidos
 * ~~Em algumas situações, após o envio de um check-in, o bot pode falhar no processamento do offset e não processar algumas mensagens.~~ ✅

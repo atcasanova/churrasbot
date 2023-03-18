@@ -1,5 +1,5 @@
-lembrete() {
-    local id="$1" data="$2" hora="$3"
+lembrete(){
+    local id="$1" data="$2" hora="$3" antes job
     data="${data:6:4}-${data:3:2}-${data:0:2}"
     antes=$(date -d "$data $hora -03 -$ANTES hour" +%H:%M)
 
@@ -13,8 +13,9 @@ lembrete() {
     RUN_SCRIPT="${REMINDER_DIR}/run_${id}.sh"
 
     sed "s|ID_PLACEHOLDER|$id|;s|DIR_PLACEHOLDER|$SCRIPT_DIR|" "${TEMPLATE_REMINDER}" > "${REMINDER_SCRIPT}"
-    (sed "s|DIR_PLACEHOLDER|${REMINDER_DIR}|" "${TEMPLATE_RUN}"; echo -e "\nbash ./$id.sh\nrm $id.sh run_$id.sh") > "${RUN_SCRIPT}"
+    (sed "s|DIR_PLACEHOLDER|${REMINDER_DIR}|" "${TEMPLATE_RUN}"; echo -e "\nbash ./$id.sh\nrm $id.sh run_$id.sh\n") > "${RUN_SCRIPT}"
 
     chmod +x "${REMINDER_SCRIPT}" "${RUN_SCRIPT}"
-    at $antes $data -f "${RUN_SCRIPT}"
+    job=$(at $antes $data -f "${RUN_SCRIPT}" 2>&1| grep -oP "(?<=job )[0-9]+")
+    echo "#job $job" >> "${RUN_SCRIPT}"
 }

@@ -1,30 +1,36 @@
-delchurras() {
-    (( $# != 3 )) && return 2
-
-    local data=$(grep -Eo "\b(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/(19|20)[0-9]{2}\b" <<< "$*")
-    local hora=$(grep -Eo "\b(0[0-9]|1[0-9]|2[0-3])(:|h)[0-5][0-9]\b" <<< "$*")
-    local place=$(grep -Eo "\b[A-Z]+\b" <<< "${*^^}")
-
-    if [[ -z "$data" ]]; then
-        echo "Data inválida"
-        return 1
-    elif [[ -z "$hora" ]]; then
-        echo "Hora inválida"
+delchurras(){
+    if (( $# != 3 )); then
         return 2
-    elif [[ -z "$place" ]]; then
-        echo "Local inválido"
-        return 3
     fi
 
+    local data hora place argValido churrasco
+    argValido=$(validaArgumentos "$*")
+    
+    IFS='|' read -r data hora place <<< "$argValido"
+    
+    checkVars "$data" "$hora" "$place" || return 3
+
+    churrasco=$(achaChurras "$argValido")
+    echo "deletaChurras \"$churrasco\""
+    deletaChurras "$churasco"
+}
+
+deletaChurras(){
     local p d t pin
-    IFS='|' read -r p d t pin <<< $(grep -m1 "$place|$data|${hora//h/:}" CHURRAS)
+    IFS='|' read -r p d t pin <<< "$*"
 
     if [[ ! -z "$pin" ]]; then
         filename="C_${p// /_}_${d//\//}"
-        [[ -e $filename && ! -s $filename ]] && rm $filename && echo "$filename vazio. Apagado"
+        if [[ -e $filename && ! -s $filename ]]; then
+            rm $filename
+            echo "$filename vazio. Apagado"
+        fi
         
         envia "$pin" "Esse churrasco foi cancelado!"
         curl -s "$apiurl/unpinChatMessage?chat_id=$CHATID&message_id=$pin"
+        job=$(grep "#job " reminders/run_$pin.sh | cut -f2 -d" ")
+        rm reminders/run_$pin.sh reminders/$pin.sh
+        atrm $job
         sed -i "/|$pin$/d" CHURRAS
     else
         envia "Nem sei de que churrasco você está falando"
