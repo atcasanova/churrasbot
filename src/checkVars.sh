@@ -15,4 +15,5 @@ checkVars(){
         echo "local invalido";
         return 3;
     }
+    echo "Variáveis OK"
 }
