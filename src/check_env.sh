@@ -17,7 +17,7 @@ check_env(){
     else
         local current_timestamp=$(stat -c %Y "env.sh")
         if [[ ! -v file_timestamps["env.sh"] ]] || (( ${file_timestamps["env.sh"]} != $current_timestamp )); then
-            echo "[UPDT] file $env.sh created or updated"
+            echo "[UPDT] file env.sh created or updated"
             source env.sh
             file_timestamps["env.sh"]=$current_timestamp
         
