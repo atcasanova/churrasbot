@@ -7,7 +7,7 @@ load_functions(){
     for function in src/*.sh; do
         current_timestamp=$(stat -c %Y "$function")
 
-        if [[ ! ${file_timestamps["$function"]+isset} ]] || (( ${file_timestamps["$function"]} < $current_timestamp )); then
+        if [[ ! -v ${file_timestamps["$function"]} ]] || (( ${file_timestamps["$function"]} < $current_timestamp )); then
             source $function
             file_timestamps["$function"]=$current_timestamp
         fi
