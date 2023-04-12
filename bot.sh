@@ -8,6 +8,7 @@ load_functions(){
         current_timestamp=$(stat -c %Y "$function")
 
         if [[ ! -v ${file_timestamps["$function"]} ]] || (( ${file_timestamps["$function"]} < $current_timestamp )); then
+            echo "[UPDT] file $function created or updated"
             source $function
             file_timestamps["$function"]=$current_timestamp
         fi
