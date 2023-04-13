@@ -25,6 +25,7 @@ newchurras(){
     # Limpa os churrascos passados e verifica se o novo churrasco não conflita com outro já existente
     clearChurras
     timeLimit $data ${hora//h/:} && checkOverlap $data ${hora//h/:} && {
+        echo "[+] CHURRAS churras marcado: $data, $hora, $lugar"
         envia "Churras marcado no dia $data, às ${hora//h/:} na $lugar. Checkin válido de 1h antes até 2h depois do horário."
         local pin="$id_msg"
         echo "$lugar|$data|${hora//h/:}|$pin" >> CHURRAS
