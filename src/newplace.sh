@@ -9,11 +9,11 @@ newplace(){
     # verifica porcamente por expressão regular o formato de latitude e longitude
     # caso não dê match retorna erro
     [[ "$latitude" =~ ^-?[0-9]+\.[0-9]+$ ]] || {
-        echo "latitude invalida";
+        echo "[-] ERROR newplace: latitude invalida";
         return 3;
     }
     [[ "$longitude" =~ ^-?[0-9]+\.[0-9]+$ ]] || {
-        echo "longitude invalida";
+        echo "[-] ERROR newplace: longitude invalida";
         return 3;
     }
 
@@ -21,7 +21,7 @@ newplace(){
     # caso já exista, retorna erro.
     [ -f localizacoes ] && {
         grep -iq "^$venue|" localizacoes && {
-            echo "ja existe $venue";
+            echo "[-] ERROR newplace: ja existe $venue";
             return 3;
         }
     }
@@ -30,5 +30,6 @@ newplace(){
     # e envia confirmação no grupo
     echo "${venue^^}|$latitude|$longitude" >> localizacoes
     echo "${venue^^}|$endereco" >> enderecos
+    echo "[+] NEWPLACE: ${venue^^} cadastrado"
     envia "${venue^^} adicionado. lat: $latitude long: $longitude"
 }
