@@ -10,7 +10,8 @@ timeLimit(){
 
     # Se a diferença for menor que 18 horas, retorna erro
     (( diff > horas_limite )) || {
-        envia "Churras deve ser marcado com no mínimo 18h de antecedência"
+        echo "[-] ERROR antecedência mínima não atendida"
+        envia "Churras deve ser marcado com no mínimo ${ANTECEDENCIA}h de antecedência"
         return 1
     }
     # se passar do bloco acima encerra OK
