@@ -16,6 +16,7 @@ cadastraEmail() {
     [ ! -s EMAILS ] && {
         echo "$username:$email" >> EMAILS
         envia "Email $email cadastrado para $username"
+        echo "[+] EMAIL $email cadastrado para $username"
         return
     }
 
@@ -23,8 +24,10 @@ cadastraEmail() {
     grep -q "^$username:" EMAILS && {
         sed -i "s/^$username:.*/$username:$email/g" EMAILS
         envia "Email de $username atualizado para $email"
+        echo "[+] EMAIL Email de $username atualizado para $email"
     } || {
         echo "$username:$email" >> EMAILS
         envia "Email $email cadastrado para $username"
+        echo "[+] EMAIL $email cadastrado para $username"
     }
 }
