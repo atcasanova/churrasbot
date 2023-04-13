@@ -23,7 +23,7 @@ geraIcs(){
         if [ -s EMAILS ]; then
             local emails=$(cut -f2 -d: EMAILS | tr '\n' ',')
             emails=${emails::-1}
-            echo "enviando emails para $emails"
+            echo "[+] MAIL enviando emails para $emails"
             echo "Checkin de ${inicial:0:2}:${inicial:2:2} até ${final:0:2}:${final:2:2}" | mailx -a "FROM:ChurrasBot <no-reply@bru.to>" -s "$nome ${2:6:2}/${2:4:2}/${2:0:4}" -A "$filename" "$emails"
         fi
     fi
