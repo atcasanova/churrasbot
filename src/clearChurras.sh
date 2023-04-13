@@ -12,11 +12,11 @@ clearChurras(){
                 filename="C_${place// /_}_${date//\//}"
                 if [ -e "$filename" ] && [ ! -s "$filename" ]; then
                     rm "$filename"
-                    echo "$filename vazio. Apagado"
+                    echo "[+] CHURRAS $filename vazio. Apagado"
                 fi
             fi
 
-            echo "Churras $place em $date $time já passou"
+            echo "[+] CHURRAS Churras $place em $date $time já passou"
             sed -i "/|$pin$/d" CHURRAS
             curl -s "$apiurl/unpinChatMessage?chat_id=$CHATID&message_id=$pin"
         fi
