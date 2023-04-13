@@ -11,6 +11,6 @@ distance(){
 
     # Distância em metros, sem casas decimais
     distance=$(echo "scale=6; $r * $d " | bc)
-    echo "distancia calculada: ${distance}"
+    echo "[+] DISTANCE distância calculada: ${distance}"
     distance=${distance%\.*}
 }
