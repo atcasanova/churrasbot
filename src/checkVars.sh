@@ -4,16 +4,15 @@ checkVars(){
     local lugar="$3"
 
     [ -z "$data" ] && {
-        echo "data invalida";
+        echo "[-] ERRO data invalida";
         return 1;
     }
     [ -z "$hora" ] && {
-        echo "hora invalida";
+        echo "[-] ERRO hora invalida";
         return 2;
     }
     [ -z "$lugar" ] && {
-        echo "local invalido";
+        echo "[-] ERRO local invalido";
         return 3;
     }
-    echo "Variáveis OK"
 }
