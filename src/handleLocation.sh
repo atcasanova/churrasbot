@@ -1,7 +1,7 @@
 # Função para apagar a mensagem de localização
 deleteLocationMessage() {
     local messageId="$1"
-    echo "Mensagem de localização detectada. Tentando apagar $messageId"
+    echo "[-] ERROR Mensagem de Localização apagada ($messageId)"
     curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" && offset
 }
 
