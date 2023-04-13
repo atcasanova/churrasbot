@@ -25,12 +25,15 @@ handleLiveLocation(){
             # Verifica se o usuário já fez checkin neste churrasco antes
             if grep -q "^$username" $filename; then
                 envia "Checkin ja realizado ☑"
+                echo "[-] CHECKIN $username já fez esse checkin"
             else
                 envia "Checkin realizado ✅"
                 echo "$username:$lugar:$(date +%s)" >> $filename
+                echo "[+] CHECKIN $username fez checkin em $lugar"
             fi
         else
             envia "Checkin proibido! 🛑 Chora, @$username"
+            echo "[-] CHECKIN checkin de $username não autorizado"
         fi
     else
         curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId"
