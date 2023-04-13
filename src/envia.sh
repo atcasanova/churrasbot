@@ -12,5 +12,4 @@ envia() {
     fi
 
     id_msg=$(curl -s -X POST "$apiurl/sendMessage" "${CURLOPTS[@]}" | jq -r '.result.message_id')
-    echo
 }
