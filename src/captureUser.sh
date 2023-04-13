@@ -6,5 +6,6 @@ captureUser() {
     if ! grep -q "^$userId$" members; then
         # Se o userId não estiver no arquivo, adiciona-o
         echo "$userId" >> members
+        echo "[+] USERS Novo Usuário no grupo: $userId"
     fi
 }
