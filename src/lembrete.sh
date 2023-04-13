@@ -18,4 +18,5 @@ lembrete(){
     chmod +x "${REMINDER_SCRIPT}" "${RUN_SCRIPT}"
     job=$(at $antes $data -f "${RUN_SCRIPT}" 2>&1| grep -oP "(?<=job )[0-9]+")
     echo "#job $job" | tee -a "${RUN_SCRIPT}"
+    echo "[+] REMINDER lembrete criado"
 }
