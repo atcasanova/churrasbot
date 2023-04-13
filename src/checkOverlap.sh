@@ -22,6 +22,7 @@ checkOverlap() {
         else
             # Se os eventos se sobrepõem, envia uma mensagem e retorna 2
             envia "$pin" "Já tem esse churras nesse horário"
+            echo "[-] OVERLAP já existe churrasco nesse horario"
             return 2
         fi
     done < CHURRAS
