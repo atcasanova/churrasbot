@@ -11,7 +11,7 @@ delchurras(){
     checkVars "$data" "$hora" "$place" || return 3
 
     churrasco=$(achaChurras "$argValido")
-    echo "deletaChurras \"$churrasco\""
+    echo "[+] DELCHURRAS \"$churrasco\""
     deletaChurras "$churrasco"
 }
 
@@ -23,7 +23,7 @@ deletaChurras(){
         filename="C_${p// /_}_${d//\//}"
         if [[ -e $filename && ! -s $filename ]]; then
             rm $filename
-            echo "$filename vazio. Apagado"
+            echo "[+] DELCHURRAS $filename vazio. Apagado"
         fi
         
         envia "$pin" "Esse churrasco foi cancelado!"
@@ -31,6 +31,7 @@ deletaChurras(){
         job=$(grep "#job " reminders/run_$pin.sh | cut -f2 -d" ")
         rm reminders/run_$pin.sh reminders/$pin.sh
         atrm $job
+        echo "[+] DELCHURRAS Job de lembrete removido"
         sed -i "/|$pin$/d" CHURRAS
     else
         envia "Nem sei de que churrasco você está falando"
