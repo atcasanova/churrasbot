@@ -1,3 +1,4 @@
+#!/bin/bash
 # Função para processar e executar comandos do bot
 handleCommand(){
     local comando="$1"

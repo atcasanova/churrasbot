@@ -1,3 +1,4 @@
+#!/bin/bash
 main(){
     response=$(curl -s -X POST --data "offset=$offset&limit=1" "$apiurl/getUpdates" | \
         jq '.result[] | "\(.update_id)|\(.message.message_id)|\(.message.chat.id)|\(.message.from.username)|\(.message.from.id)|\(.message.date)|\(.message.location.latitude)|\(.message.location.longitude)|\(.message.location.live_period)|\(.message.text)"' -r)

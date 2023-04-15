@@ -1,3 +1,4 @@
+#!/bin/bash
 lembrete(){
     local id="$1" data="$2" hora="$3" antes job
     data="${data:6:4}-${data:3:2}-${data:0:2}"

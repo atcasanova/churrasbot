@@ -1,3 +1,4 @@
+#!/bin/bash
 # Função para apagar a mensagem de localização
 deleteLocationMessage() {
     local messageId="$1"

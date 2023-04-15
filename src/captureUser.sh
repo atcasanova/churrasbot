@@ -1,3 +1,4 @@
+#!/bin/bash
 # Função para capturar o userId de cada membro que envia uma mensagem ao bot
 captureUser() {
     local userId="$1"

@@ -1,3 +1,4 @@
+#!/bin/bash
 sendLocation() {
     # Verifica se o argumento foi fornecido
     (( $# != 1 )) && return 3

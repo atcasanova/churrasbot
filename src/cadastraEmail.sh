@@ -1,3 +1,4 @@
+#!/bin/bash
 # Função para cadastrar ou atualizar o email de um usuário
 cadastraEmail() {
     # Verifica se há exatamente um argumento

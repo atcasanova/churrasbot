@@ -1,3 +1,4 @@
+#!/bin/bash
 churrasAtivo(){
     clearChurras
     local p d t id now horario_minimo horario_maximo

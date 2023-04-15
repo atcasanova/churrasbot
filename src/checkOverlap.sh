@@ -1,3 +1,4 @@
+#!/bin/bash
 checkOverlap() {
     # Retorna se o arquivo CHURRAS não existir
     [ ! -f CHURRAS ] && return

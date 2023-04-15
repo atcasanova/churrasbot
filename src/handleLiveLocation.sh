@@ -1,3 +1,4 @@
+#!/bin/bash
 handleLiveLocation(){
     # Verifica se o número de argumentos está correto
     (( $# != 3 )) && { envia "Falha no processamento da Live Location"; return 1; }

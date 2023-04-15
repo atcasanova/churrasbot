@@ -1,3 +1,4 @@
+#!/bin/bash
 ranking(){
     local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -k1nr -k2| sed 's/^ \{1,\}//g')"
 

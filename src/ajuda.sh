@@ -1,3 +1,4 @@
+#!/bin/bash
 ajuda(){
     curl -s -X POST "$apiurl/sendMessage" \
     -F "chat_id=$CHATID" \

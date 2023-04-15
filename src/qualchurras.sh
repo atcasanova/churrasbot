@@ -1,3 +1,4 @@
+#!/bin/bash
 qualchurras(){
     clearChurras
     churrasAtivo && {

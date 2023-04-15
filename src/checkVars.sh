@@ -1,3 +1,4 @@
+#!/bin/bash
 checkVars(){
     local data="$1"
     local hora="$2"

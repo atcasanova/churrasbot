@@ -1,3 +1,4 @@
+#!/bin/bash
 fake(){
     (( $# != 1 )) && return 2;
     churrasAtivo && {

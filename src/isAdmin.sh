@@ -1,3 +1,4 @@
+#!/bin/bash
 # Função para verificar se um usuário é administrador
 isAdmin(){
     # Percorre a lista de administradores

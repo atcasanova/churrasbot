@@ -1,3 +1,4 @@
+#!/bin/bash
 newplace(){
     (( $# < 4 )) && return 2
     local venue="$1"

@@ -1,3 +1,4 @@
+#!/bin/bash
 achaChurras(){
     local place data hora
     IFS='|' read -r data hora place <<< "$*"

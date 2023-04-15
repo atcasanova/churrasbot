@@ -1,3 +1,4 @@
+#!/bin/bash
 # Função para verificar o ambiente antes de executar o script
 check_env(){
     # Verifica se o arquivo env.sh existe, caso contrário, cria um modelo e exibe um erro

@@ -1,3 +1,4 @@
+#!/bin/bash
 distance(){
     local lat1 lon1 lat2 lon2 a d r=6378140 pi=3.14159265358979323846
     lat1=$(echo "scale=20; $1 * ($pi / 180)" | bc -l)

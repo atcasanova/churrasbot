@@ -1,4 +1,5 @@
-envia() {
+#!/bin/bash
+envia(){
     local reply=""
     if (( $# == 2 )); then
         reply="$1"

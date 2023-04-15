@@ -1,3 +1,4 @@
+#!/bin/bash
 delchurras(){
     if (( $# != 3 )); then
         return 2

@@ -1,3 +1,4 @@
+#!/bin/bash
 geraIcs(){
     local nome="Churras @ $1"
     local base="${3//:}00"
