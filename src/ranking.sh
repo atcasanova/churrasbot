@@ -45,11 +45,13 @@ ranking(){
             fi
 
             # envia a imagem
-            curl -s -X POST "$apiurl/sendPhoto"  \
+            local result=$(curl -s -X POST "$apiurl/sendPhoto"  \
             -F "chat_id=$CHATID" \
             -F "photo=@chart.png" \
-            -F "caption=Ranking" | jq '.ok'
-            echo
+            -F "caption=Ranking" | jq '.ok')
+            [ "$result" == "true" ] && \
+                echo "[+] RANKING imagem enviada" || \
+                echo "[-] RANKING falha no envio da imagem"
         }
     }
 }
