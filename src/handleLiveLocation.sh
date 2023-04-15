@@ -16,7 +16,8 @@ handleLiveLocation(){
         envia "O @$username está a $distance metros da $lugar."
 
         # Deleta a mensagem de localização enviada para evitar poluição no grupo
-        curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId"
+        local delete=$(curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" | jq '.result')
+        [ "$delete" == "true" ] && echo "[+] CHECKIN Localização deletada"
 
         # Verifica se a distância é menor ou igual à distância permitida
         if (( ${distance:-$DISTANCIA} <= $DISTANCIA )); then
@@ -36,6 +37,7 @@ handleLiveLocation(){
             echo "[-] CHECKIN checkin de $username não autorizado"
         fi
     else
-        curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId"
+         local delete=$(curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" | jq '.result')
+         [ "$delete" == "true" ] && echo "[+] CHECKIN nenhum churras ativo, localização deletada"
     fi
 }
