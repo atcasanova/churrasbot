@@ -41,7 +41,7 @@ ranking(){
             ## caso já tenha, envia o mesmo. Caso contrário, gera um novo
             if [ ! -f payload_ranking ] || [ "$payload" != "$(cat payload_ranking)" ]; then
                 echo "$payload" > payload_ranking
-                curl -s "https://quickchart.io/chart?c=$payload" -o chart.png
+                curl -s "$QUICKCHART/chart?c=$payload" -o chart.png
             fi
 
             # envia a imagem
