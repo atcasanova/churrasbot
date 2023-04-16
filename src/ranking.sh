@@ -35,7 +35,7 @@ ranking(){
             options=",options:{scales:{xAxes:[{ticks:{beginAtZero:true,min:0,max:$max,stepSize:1}}]}}"
 
             ## gera a string com nomes, pontos e opções e faz urlencoding
-            payload=$(echo -ne "{type:'horizontalBar',data:{labels:[${users::-1}],datasets:[{label:'Presenças',data:[${pontos::-1}]}]}$options}" | perl -pe 's/\W/"%".unpack "H*",$&/gei' )
+            payload=$(echo -ne "{type:'horizontalBar',data:{labels:[${users::-1}],datasets:[{label:'Presenças',data:[${pontos::-1}],backgroundColor:'rgba(54, 162, 235, 0.2)',borderColor:'rgba(54, 162, 235, 1)',borderWidth:1}]}$options}" | perl -pe 's/\W/"%".unpack "H*",$&/gei' )
 
             ## verifica se esse gráfico já foi pedido antes
             ## caso já tenha, envia o mesmo. Caso contrário, gera um novo
