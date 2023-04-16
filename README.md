@@ -12,6 +12,7 @@ O CHURRASBOT é um bot do Telegram criado para gerenciar a presença dos partici
 ```bash
 TOKEN="token_do_seu_bot"
 apiurl="https://api.telegram.org/bot$TOKEN"
+QUICKCHART="https://quickchart.io" # Altere se estiver rodando seu próprio quickchart
 CHATID="CHAT_ID do grupo"
 ADMINS=( "username_admin1" "username_admin_n" )
 DISTANCIA=150       # Distância válida para check-in (metros)
