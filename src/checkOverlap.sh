@@ -27,4 +27,5 @@ checkOverlap() {
             return 2
         fi
     done < CHURRAS
+    return 0;
 }

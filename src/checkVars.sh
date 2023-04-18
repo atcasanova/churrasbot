@@ -16,4 +16,5 @@ checkVars(){
         echo "[-] ERRO local invalido";
         return 3;
     }
+    return 0;
 }

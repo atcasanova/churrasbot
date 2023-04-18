@@ -35,7 +35,7 @@ newchurras(){
     }
 
     # Fixa a mensagem do churrasco no chat e envia o arquivo .ics
-    curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$pin&disable_notification=false"
+    local ok=$(curl -s "$apiurl/pinChatMessage?chat_id=$CHATID&message_id=$pin&disable_notification=false")
     geraIcs "$lugar" "${data:6:4}${data:3:2}${data:0:2}" "${hora//h/:}"
     sendLocation "$lugar"
     notificaUsers

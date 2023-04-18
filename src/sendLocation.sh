@@ -15,12 +15,12 @@ sendLocation() {
         IFS='|' read venue lat long <<< "$(grep "^${searchString}|" localizacoes)"
 
         # Envia a localização do local para o chat
-        curl -s $apiurl/sendVenue \
+        local ok=$(curl -s $apiurl/sendVenue \
             -F "chat_id=$CHATID" \
             -F "latitude=$lat" \
             -F "longitude=$long" \
             -F "title=${venue}" \
-            -F "address=$address" | jq '.ok'
+            -F "address=$address" | jq '.ok')
         echo
     fi
 }

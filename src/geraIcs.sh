@@ -17,7 +17,7 @@ geraIcs(){
     echo -e "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDESCRIPTION:$nome\\\\nCheckin:\\\\nDe ${inicial:0:2}:${inicial:2:2}\\\\nAté ${final:0:2}:${final:2:2}\nSUMMARY:$nome\nSTATUS:CONFIRMED\nDTSTART;VALUE=DATE-TIME:$inicio\nDTEND;VALUE=DATE-TIME:$fim\nLOCATION:$endereco\nEND:VEVENT\nEND:VCALENDAR" > $filename
 
     # Envia o arquivo ICS para o chat
-    curl -s -X POST "$apiurl/sendDocument" -F "chat_id=$CHATID" -F "document=@$filename" -F "caption=Agendamento do Churras, salve na agenda" | jq '.ok'
+    local ok=$(curl -s -X POST "$apiurl/sendDocument" -F "chat_id=$CHATID" -F "document=@$filename" -F "caption=Agendamento do Churras, salve na agenda" | jq '.ok')
 
     # Se o envio de email estiver habilitado, envia o arquivo ICS por email
     if mailEnabled; then

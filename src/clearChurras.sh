@@ -17,9 +17,9 @@ clearChurras(){
                 fi
             fi
 
-            echo "[+] CHURRAS Churras $place em $date $time já passou"
+            echo "[+] CHURRAS Churras $place em $date $time já passou, tirando pin"
             sed -i "/|$pin$/d" CHURRAS
-            curl -s "$apiurl/unpinChatMessage?chat_id=$CHATID&message_id=$pin"
+            local ok=$(curl -s "$apiurl/unpinChatMessage?chat_id=$CHATID&message_id=$pin")
         fi
     done < CHURRAS
 }
