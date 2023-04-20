@@ -10,7 +10,7 @@ ranking(){
                 read pontos malandro <<< "$edit"
                 debito=$(grep -c "^$malandro$" penalidades)
                 pontos=$(( $pontos - $debito ))
-                ranking=$(echo "$ranking" | sed "s/$edit/$pontos $penalizado (-$debito)/g" | sort -nr)
+                ranking=$(echo "$ranking" | sed "s/$edit/$pontos $penalizado (-$debito)/g" | sort -k1,1nr -k2,2)
             }
         done
     }
