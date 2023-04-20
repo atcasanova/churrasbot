@@ -1,6 +1,6 @@
 #!/bin/bash
 ranking(){
-    local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -k1,1nr -k2,2 | sed 's/^ \{1,\}//g')"
+    local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -k1,1nr -k2,2f | sed 's/^ \{1,\}//g')"
 
     # edita o ranking antes e enviar considerando penalidades cadastradas
     [ -f penalidades ] && {
@@ -10,7 +10,7 @@ ranking(){
                 read pontos malandro <<< "$edit"
                 debito=$(grep -c "^$malandro$" penalidades)
                 pontos=$(( $pontos - $debito ))
-                ranking=$(echo "$ranking" | sed "s/$edit/$pontos $penalizado (-$debito)/g" | sort -k1,1nr -k2,2)
+                ranking=$(echo "$ranking" | sed "s/$edit/$pontos $penalizado (-$debito)/g")
             }
         done
     }
