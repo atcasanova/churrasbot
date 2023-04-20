@@ -21,17 +21,17 @@ ranking(){
         isAdmin $username && {
             # imagem considera apenas usuários com as 3 maiores pontuações
             local points="$(cut -f1 -d" " <<< "$ranking" | sort -nur | head -3 | tr '\n' '|')"
-            ranking=$(grep -E "^(${points::-1}) " <<< "$ranking")
+            local chart=$(grep -E "^(${points::-1}) " <<< "$ranking" | sort -k1,1nr -k2,2f)
 
             # geração string para gerar gráfico na API do quickchart
             local users pontos score name payload
             while read score name ; do
                 users+="'$name',"
                 pontos+="$score,"
-            done <<< "$ranking"
+            done <<< "$chart"
 
             ## Define o topo do gráfico em 2 pts acima da maior pontuação
-            max=$(( $(head -1 <<< $ranking | cut -f1 -d" ") + 2 ))
+            max=$(( $(head -1 <<< $chart | cut -f1 -d" ") + 2 ))
             options=",options:{scales:{xAxes:[{ticks:{beginAtZero:true,min:0,max:$max,stepSize:1}}]}}"
 
             ## gera a string com nomes, pontos e opções e faz urlencoding
