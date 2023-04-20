@@ -6,7 +6,7 @@ check_env(){
         cat > env.sh <<- EOF
 	TOKEN=""
 	apiurl="https://api.telegram.org/bot\$TOKEN"
-    QUICKCHART="https://quickchart.io"
+	QUICKCHART="https://quickchart.io"
 	CHATID=""
 	ADMINS=("")
 	DISTANCIA=150
