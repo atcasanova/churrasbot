@@ -1,6 +1,6 @@
 #!/bin/bash
 ranking(){
-    local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -k1nr -k2| sed 's/^ \{1,\}//g')"
+    local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -k1,1nr -k2,2 | sed 's/^ \{1,\}//g')"
 
     # edita o ranking antes e enviar considerando penalidades cadastradas
     [ -f penalidades ] && {
@@ -20,7 +20,7 @@ ranking(){
       
         isAdmin $username && {
             # imagem considera apenas usuários com as 3 maiores pontuações
-            local points="$(cut -f1 -d" " <<< "$ranking" | sort -nur| head -3|tr '\n' '|')"
+            local points="$(cut -f1 -d" " <<< "$ranking" | sort -nur | head -3 | tr '\n' '|')"
             ranking=$(grep -E "^(${points::-1}) " <<< "$ranking")
 
             # geração string para gerar gráfico na API do quickchart
