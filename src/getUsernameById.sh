@@ -8,6 +8,6 @@ getUsernameById(){
         echo "$id:$username" >> members2
     elif [ "${str}" != "$id:$username" ]; then
         echo "[USER] $id:$username alterado"
-        sed -i "s/^$id:*/$id:$username" members2
+        sed -i "s/^$id:*/$id:$username/g" members2
     fi
 }
