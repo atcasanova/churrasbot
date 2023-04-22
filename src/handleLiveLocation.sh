@@ -1,9 +1,9 @@
 #!/bin/bash
 handleLiveLocation(){
     # Verifica se o número de argumentos está correto
-    (( $# != 3 )) && { envia "Falha no processamento da Live Location"; return 1; }
+    (( $# != 4 )) && { envia "Falha no processamento da Live Location"; return 1; }
 
-    local username="$1" latitude="$2" longitude="$3" lat long nome alvo
+    local username="$1" latitude="$2" longitude="$3" userid="$4" lat long nome alvo
     offset
 
     # Verifica se há um churrasco ativo e pega os dados relevantes
@@ -32,6 +32,7 @@ handleLiveLocation(){
                 envia "Checkin realizado ✅"
                 echo "$username:$lugar:$(date +%s)" >> $filename
                 echo "[+] CHECKIN $username fez checkin em $lugar"
+                getUsernameById "$userid"
             fi
         else
             envia "Checkin proibido! 🛑 Chora, @$username"

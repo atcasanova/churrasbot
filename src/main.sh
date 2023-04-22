@@ -13,7 +13,8 @@ main(){
 
     # Tratar live location
     if [ "$live_period" != "null" ]; then
-        handleLiveLocation "$username" "$latitude" "$longitude"
+        #handleLiveLocation "$username" "$latitude" "$longitude"
+        handleLiveLocation "$username" "$latitude" "$longitude" "$userid"
     # Tratar localização normal e apagar a mensagem
     elif [ "$longitude" != "null" ]; then
         handleLocation "$username"
