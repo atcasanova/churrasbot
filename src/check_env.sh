@@ -4,11 +4,11 @@ check_env(){
     # Verifica se o arquivo env.sh existe, caso contrário, cria um modelo e exibe um erro
     if [ ! -f env.sh ]; then
         cat > env.sh <<- EOF
-	TOKEN=""
-	apiurl="https://api.telegram.org/bot\$TOKEN"
-	QUICKCHART="https://quickchart.io"
-	CHATID=""
-	ADMINS=("")
+	readonly TOKEN=""
+	readonly apiurl="https://api.telegram.org/bot\$TOKEN"
+	readonly QUICKCHART="https://quickchart.io"
+	readonly CHATID=""
+	readonly ADMINS=("")
 	DISTANCIA=150
 	EMAIL=no
 	ANTES=1

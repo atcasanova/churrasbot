@@ -85,7 +85,7 @@ Esse comando anula o check-in e subtrai um ponto adicional do usuário no rankin
 - [x] Enviar notificações de churrascos por e-mail
 - [x] Enviar lembrete de início do check-in no Telegram
 - [ ] Enviar lembrete de término do check-in no Telegram
-- [ ] Mudar a lista de usuários para IDs ao invés de usernames
+- [⏳] Mudar a lista de usuários e controle de check-in para IDs ao invés de usernames
 
 # Problemas conhecidos
 * ~~Em algumas situações, após o envio de um check-in, o bot pode falhar no processamento do offset e não processar algumas mensagens.~~ ✅
