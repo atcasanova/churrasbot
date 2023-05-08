@@ -42,7 +42,7 @@ check_env(){
             (( ${#ADMINS[0]} < 1 )) && error "Array ADMINS deve ter ao menos um elemento"
         
             # Preenche BOTNAME
-            [ -z $BOTNAME ] && BOTNAME="@$(curl -s $apiurl/getMe | jq -r '.result.username')"
+            [ -z $BOTNAME ] && readonly BOTNAME="@$(curl -s $apiurl/getMe | jq -r '.result.username')"
         fi
     fi
 }
