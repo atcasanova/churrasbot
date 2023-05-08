@@ -18,7 +18,7 @@ handleLiveLocation(){
 
         # Deleta a mensagem de localização enviada para evitar poluição no grupo
         local delete=$(curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" | jq '.result')
-        [ "$delete" == "true" ] && echo "[+] CHECKIN Localização deletada"
+        [ "$delete" == "true" ] && echo "[+] CHECKIN Localização de $username ($userid) deletada"
 
         # Verifica se a distância é menor ou igual à distância permitida
         if (( ${distance:-$DISTANCIA} <= $DISTANCIA )); then
@@ -27,16 +27,16 @@ handleLiveLocation(){
             # Verifica se o usuário já fez checkin neste churrasco antes
             if grep -q "^$username" $filename; then
                 envia "Checkin ja realizado ☑"
-                echo "[-] CHECKIN $username já fez esse checkin"
+                echo "[-] CHECKIN $username ($userid) já fez esse checkin"
             else
                 envia "Checkin realizado ✅"
                 echo "$username:$lugar:$(date +%s)" >> $filename
-                echo "[+] CHECKIN $username fez checkin em $lugar"
+                echo "[+] CHECKIN $username ($userid) fez checkin em $lugar"
                 getUsernameById "$userid"
             fi
         else
             envia "Checkin proibido! 🛑 Chora, @$username"
-            echo "[-] CHECKIN checkin de $username não autorizado"
+            echo "[-] CHECKIN checkin de $username ($userid) não autorizado"
         fi
     else
          local delete=$(curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" | jq '.result')

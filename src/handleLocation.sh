@@ -1,9 +1,9 @@
 #!/bin/bash
 # Função para apagar a mensagem de localização
 deleteLocationMessage() {
-    local messageId="$1"
+    local messageId="$1" ok
     echo "[-] ERROR Mensagem de Localização apagada ($messageId)"
-    curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId" && offset
+    ok=$(curl -s "$apiurl/deleteMessage?chat_id=$CHATID&message_id=$messageId") && offset
 }
 
 # Função para informar que o checkin deve ser feito com Live Location
