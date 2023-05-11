@@ -1,7 +1,7 @@
 #!/bin/bash
 getUsernameById(){
     local id="$1"
-    local username=$(curl -s "$apiurl/getChatMember?chat_id=$CHATID&user_id=$id" | jq -r '.result.user.username')
+    local username="$2"
     local str=$(grep "^$id:" members)
     if [ "${str:=null}" == "null" ]; then
         echo "[+] USER $id:$username cadastrado"

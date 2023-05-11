@@ -32,7 +32,7 @@ handleLiveLocation(){
                 envia "Checkin realizado ✅"
                 echo "$userid:$lugar:$(date +%s)" >> $filename
                 echo "[+] CHECKIN $username ($userid) fez checkin em $lugar"
-                getUsernameById "$userid"
+                getUsernameById "$userid" "$username"
             fi
         else
             envia "Checkin proibido! 🛑 Chora, @$username"
