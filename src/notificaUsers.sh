@@ -7,7 +7,7 @@ notificaUsers(){
         # username=$(curl -s "$apiurl/getChatMember?chat_id=$CHATID&user_id=$id" | jq -r '.result.user.username')
         [ "$username" == "null" -o "@$username" = "$BOTNAME" ] && continue
         msg+="@$username "
-    done < <(shuf members)
+    done < <(cut -f2 -d: members | shuf)
     msg=${msg::-1}
     msg+="! Tem churras marcado!"
     envia "$msg"

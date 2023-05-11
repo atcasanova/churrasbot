@@ -14,7 +14,7 @@ TOKEN="token_do_seu_bot"
 apiurl="https://api.telegram.org/bot$TOKEN"
 QUICKCHART="https://quickchart.io" # Altere se estiver rodando seu próprio quickchart
 CHATID="CHAT_ID do grupo"
-ADMINS=( "username_admin1" "username_admin_n" )
+ADMINS=( "userId_admin_1" "userId_admin_n" )
 DISTANCIA=150       # Distância válida para check-in (metros)
 EMAIL=no            # Mude para yes para usar emails
 ANTES=1             # Horas antes do evento para início do check-in
@@ -85,7 +85,7 @@ Esse comando anula o check-in e subtrai um ponto adicional do usuário no rankin
 - [x] Enviar notificações de churrascos por e-mail
 - [x] Enviar lembrete de início do check-in no Telegram
 - [ ] Enviar lembrete de término do check-in no Telegram
-- [⏳] Mudar a lista de usuários e controle de check-in para IDs ao invés de usernames
+- [x] Mudar a lista de usuários e controle de check-in para IDs ao invés de usernames
 
 # Problemas conhecidos
 * ~~Em algumas situações, após o envio de um check-in, o bot pode falhar no processamento do offset e não processar algumas mensagens.~~ ✅

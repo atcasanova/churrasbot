@@ -1,4 +1,10 @@
 #!/bin/bash
+translateRanking(){
+    while IFS=: read id user; do
+        ranking=$(sed "s/ $id$/ $user/g" <<< "$ranking")
+    done < members
+}
+
 ranking(){
     local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -k1,1nr -k2,2f | sed 's/^ \{1,\}//g')"
 
@@ -15,7 +21,8 @@ ranking(){
         done
     }
 
-    [ -z "$ranking" ] && envia "Ranking ainda está vazio" || { 
+    [ -z "$ranking" ] && envia "Ranking ainda está vazio" || {
+        translateRanking
         envia "$ranking" 
       
         isAdmin $username && {

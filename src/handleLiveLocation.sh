@@ -25,12 +25,12 @@ handleLiveLocation(){
             local filename="C_${lugar// /_}_${data//\//}"
             
             # Verifica se o usuário já fez checkin neste churrasco antes
-            if grep -q "^$username" $filename; then
+            if grep -q "^$userid" $filename; then
                 envia "Checkin ja realizado ☑"
                 echo "[-] CHECKIN $username ($userid) já fez esse checkin"
             else
                 envia "Checkin realizado ✅"
-                echo "$username:$lugar:$(date +%s)" >> $filename
+                echo "$userid:$lugar:$(date +%s)" >> $filename
                 echo "[+] CHECKIN $username ($userid) fez checkin em $lugar"
                 getUsernameById "$userid"
             fi

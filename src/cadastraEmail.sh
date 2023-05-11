@@ -15,20 +15,20 @@ cadastraEmail() {
 
     # Se o arquivo EMAILS não existe ou está vazio, cadastra o email
     [ ! -s EMAILS ] && {
-        echo "$username:$email" >> EMAILS
-        envia "Email $email cadastrado para $username"
-        echo "[+] EMAIL $email cadastrado para $username"
+        echo "$userid:$email" >> EMAILS
+        envia "Email $email cadastrado para $userid ($username)"
+        echo "[+] EMAIL $email cadastrado para $userid ($username)"
         return
     }
 
     # Se o usuário já está cadastrado, atualiza o email, caso contrário, adiciona um novo registro
-    grep -q "^$username:" EMAILS && {
-        sed -i "s/^$username:.*/$username:$email/g" EMAILS
+    grep -q "^$userid:" EMAILS && {
+        sed -i "s/^$userid:.*/$userid:$email/g" EMAILS
         envia "Email de $username atualizado para $email"
-        echo "[+] EMAIL Email de $username atualizado para $email"
+        echo "[+] EMAIL Email de $userid ($username) atualizado para $email"
     } || {
-        echo "$username:$email" >> EMAILS
+        echo "$userid:$email" >> EMAILS
         envia "Email $email cadastrado para $username"
-        echo "[+] EMAIL $email cadastrado para $username"
+        echo "[+] EMAIL $email cadastrado para $userid ($username)"
     }
 }

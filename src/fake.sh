@@ -4,11 +4,11 @@ fake(){
     churrasAtivo && {
         filename=C_${lugar// /_}_${data//\//}
         local malandro="$1"
-        grep -qi "^$malandro:" $filename && {
-            sed -i "/^$malandro:/d" $filename && {
+        local userid=$(getId "$malandro")
+        grep -qi "^$userid:" $filename && {
+            sed -i "/^$userid:/d" $filename && {
                 envia "Checkin do $malandro removido"
-                echo "$malandro" >> penalidades
-                envia "$(cut -f1 -d: $filename)"
+                echo "$userid" >> penalidades
             }
         }
     }

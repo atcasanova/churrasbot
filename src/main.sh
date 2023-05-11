@@ -6,8 +6,7 @@ main(){
     [ -z "$response" ] && return;
     IFS='|' read offset messageId chatid username userid data latitude longitude live_period text <<< "$response"
     # echo "$offset|$messageId|$chatid|$userid|$username|$data|$latitude|$live_period|$text"
-    captureUser "$username"
-
+    
     # Ignorar mensagens que não são do grupo $CHATID
     (( ${chatid//null/$CHATID} != $CHATID )) && { offset; return; }
 
