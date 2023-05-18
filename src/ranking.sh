@@ -60,5 +60,6 @@ ranking(){
                 echo "[+] RANKING imagem enviada" || \
                 echo "[-] RANKING falha no envio da imagem"
         }
+        clearChurras
     }
 }
