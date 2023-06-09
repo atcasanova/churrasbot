@@ -27,7 +27,7 @@ ranking(){
       
         isAdmin $username && {
             # imagem considera apenas usuários com as 3 maiores pontuações
-            local points="$(cut -f1 -d" " <<< "$ranking" | sort -nur | head -3 | tr '\n' '|')"
+            local points="$(cut -f1 -d" " <<< "$ranking" | sort -nur | head -5 | tr '\n' '|')"
             local chart=$(grep -E "^(${points::-1}) " <<< "$ranking" | sort -k1,1nr -k2,2f)
 
             # geração string para gerar gráfico na API do quickchart
