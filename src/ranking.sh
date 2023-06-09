@@ -1,7 +1,7 @@
 #!/bin/bash
 translateRanking(){
     while IFS=: read id user; do
-        ranking=$(sed "s/ $id$/ $user/g" <<< "$ranking")
+        ranking=$(sed "s/ $id$/ @$user/g" <<< "$ranking")
     done < members
 }
 
