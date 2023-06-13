@@ -6,7 +6,10 @@ translateRanking(){
 }
 
 ranking(){
-    local ranking="$(cut -f1 -d: C_* | sort | uniq -c | sort -k1,1nr -k2,2f | sed 's/^ \{1,\}//g')"
+    # Apenas churrascos com 3 ou mais presenças contam pro ranking
+    local files=$(wc -l C_* | awk '$1 >= 3 {print $2}' | grep -v "^total$")
+    # Gera e ordena o ranking com base no filtro acima
+    local ranking="$(cut -f1 -d: $files | sort | uniq -c | sort -k1,1nr -k2,2f | sed 's/^ \{1,\}//g')"
 
     # edita o ranking antes e enviar considerando penalidades cadastradas
     [ -f penalidades ] && {
