@@ -9,6 +9,7 @@ handleCommand(){
         /newplace\ *)     isAdmin && newplace ${comando//\/newplace /};;
         /fake\ *)         isAdmin && fake ${comando//\/fake /};;
         /email\ *)        mailEnabled && cadastraEmail ${comando//\/email /};;
+        /places)          isAdmin && places;;
         /qualchurras)     qualchurras;;
         /ranking)         ranking;;
         /help)            ajuda;;

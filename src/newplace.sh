@@ -1,4 +1,9 @@
 #!/bin/bash
+places(){
+    local places=$(cut -f1 -d'|' localizacoes)
+    envia "$places"
+}
+
 newplace(){
     (( $# < 4 )) && return 2
     local venue="$1"
