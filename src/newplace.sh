@@ -1,6 +1,6 @@
 #!/bin/bash
 places(){
-    local places=$(cut -f1 -d'|' localizacoes)
+    local places=$(cut -f1 -d'|' localizacoes | sort)
     envia "$places"
 }
 
