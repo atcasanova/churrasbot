@@ -6,8 +6,9 @@ translateRanking(){
 }
 
 ranking(){
+    ano=$(date +%Y)
     # Apenas churrascos com 3 ou mais presenças contam pro ranking
-    local files=$(wc -l C_* | awk '$1 >= 3 {print $2}' | grep -v "^total$")
+    local files=$(wc -l C_*$ano | awk '$1 >= 3 {print $2}' | grep -v "^total$")
     # Gera e ordena o ranking com base no filtro acima
     local ranking="$(cut -f1 -d: $files | sort | uniq -c | sort -k1,1nr -k2,2f | sed 's/^ \{1,\}//g')"
 
