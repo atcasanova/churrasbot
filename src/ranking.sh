@@ -5,6 +5,17 @@ translateRanking(){
     done < members
 }
 
+replyGPT(){
+    local string="$(ls C_*_*$(date +%Y) | wc -l)\n$(echo $ranking | sed ':a;N;$!ba;s/\n/\\n/g')"
+    local prompt=$(sed "s/RANKING/$string/g" prompt)
+    local reply=$(curl -sX POST -H "Content-Type: application/json" \
+                     -H "Authorization: Bearer $GPTAPIKEY" \
+                     --data "{\"model\":\"gpt-3.5-turbo\",\"messages\":[{\"role\":\"system\",\"content\":\"$ranking\"}], \"max_tokens\": 1024}" \
+                     https://api.openai.com/v1/chat/completions|jq '.choices[].message.content')
+    
+    envia $(echo -e "$reply")
+}
+
 ranking(){
     ano=$(date +%Y)
     # Apenas churrascos com 3 ou mais presenças contam pro ranking
@@ -30,6 +41,7 @@ ranking(){
         envia "$ranking" 
       
         isAdmin $username && {
+            [ -f prompt ] && [ ! -z "$GPTAPIKEY" ] && replyGPT &
             # imagem considera apenas usuários com as 3 maiores pontuações
             local points="$(cut -f1 -d" " <<< "$ranking" | sort -nur | head -5 | tr '\n' '|')"
             local chart=$(grep -E "^(${points::-1}) " <<< "$ranking" | sort -k1,1nr -k2,2f)
