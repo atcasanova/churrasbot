@@ -6,15 +6,14 @@ translateRanking(){
 }
 
 replyGPT(){
-    local string="$(ls C_*_*$(date +%Y) | wc -l)\n$(echo $ranking | sed ':a;N;$!ba;s/\n/\\\\n/g')"
-    local prompt=$(sed "s/RANKING/$string/g" prompt | sed -E -e 's/([0-9]+ @[a-zA-Z0-9_]+)/\n\1/g')
-    echo $prompt
+    local string="$(echo $ranking | sed ':a;N;$!ba;s/\n/\\\\n/g')"
+    local prompt=$(sed "s/RANKING/$string/g" prompt | sed -E -e 's/([0-9]+ @[a-zA-Z0-9_]+)/\\n\1/g')
     local reply=$(curl -sX POST -H "Content-Type: application/json" \
                      -H "Authorization: Bearer $GPTAPIKEY" \
                      --data "{\"model\":\"gpt-3.5-turbo\",\"messages\":[{\"role\":\"system\",\"content\":\"$prompt\"}], \"max_tokens\": 1024}" \
                      https://api.openai.com/v1/chat/completions|jq '.choices[].message.content')
-    
-    envia $(echo -e "$reply")
+
+    enviamd "$reply"
 }
 
 ranking(){
