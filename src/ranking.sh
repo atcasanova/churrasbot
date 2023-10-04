@@ -13,7 +13,7 @@ replyGPT(){
                      --data "{\"model\":\"gpt-3.5-turbo\",\"messages\":[{\"role\":\"system\",\"content\":\"$prompt\"}], \"max_tokens\": 1024}" \
                      https://api.openai.com/v1/chat/completions|jq '.choices[].message.content')
 
-    envia "$reply"
+    envia "$(echo -e "$reply")"
 }
 
 ranking(){
