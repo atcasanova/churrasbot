@@ -12,6 +12,7 @@ handleCommand(){
         /places)          isAdmin && places;;
         /qualchurras)     qualchurras;;
         /ranking)         ranking;;
+        /ranking\ *)      ranking ${comando//\/ranking /};;
         /help)            ajuda;;
     esac
 }
