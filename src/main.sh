@@ -10,6 +10,9 @@ main(){
     # Ignorar mensagens que não são do grupo $CHATID
     (( ${chatid//null/$CHATID} != $CHATID )) && { offset; return; }
 
+    # Limpa churras encerrados a cada nova mensagem recebida no grupo
+    clearChurras
+
     # Tratar live location
     if [ "$live_period" != "null" ]; then
         #handleLiveLocation "$username" "$latitude" "$longitude"
